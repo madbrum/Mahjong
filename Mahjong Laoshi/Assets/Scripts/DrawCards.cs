@@ -14,4 +14,13 @@ public class DrawCards : MonoBehaviour
     {
         
     }
+
+    public void OnClick()
+    {
+        for (int i = 0; i < 13; i++)
+        {
+            GameObject playerTile = Instantiate(OneDotTile, new Vector3(0, 0, 0), Quaternion.identity);
+            playerTile.transform.SetParent(PlayerArea.transform, false);
+        }
+    }
 }
