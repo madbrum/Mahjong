@@ -295,7 +295,7 @@ GameObject:
   - component: {fileID: 598651106}
   - component: {fileID: 598651105}
   m_Layer: 5
-  m_Name: Canvas
+  m_Name: Main Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -395,6 +395,30 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 1812781198673711289, guid: b88ad9d8b2f1b544a8e170b43b741673, type: 3}
   m_PrefabInstance: {fileID: 1812781199150722275}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &748076123
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 748076121}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a8695521f0d02e499659fee002a26c2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Padding:
+    m_Left: 0
+    m_Right: 0
+    m_Top: 0
+    m_Bottom: 0
+  m_ChildAlignment: 4
+  m_StartCorner: 3
+  m_StartAxis: 1
+  m_CellSize: {x: 50, y: 61}
+  m_Spacing: {x: 0, y: 0}
+  m_Constraint: 2
+  m_ConstraintCount: 1
 --- !u!1 &904760442 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5781150354390666800, guid: 97adafc29f9655a479a97b0bad11da96, type: 3}
@@ -708,7 +732,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1812781198673711289, guid: b88ad9d8b2f1b544a8e170b43b741673, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -0.000030518
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1812781198673711289, guid: b88ad9d8b2f1b544a8e170b43b741673, type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -813,7 +837,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5781150354390666801, guid: 97adafc29f9655a479a97b0bad11da96, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0.000030518
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5781150354390666801, guid: 97adafc29f9655a479a97b0bad11da96, type: 3}
       propertyPath: m_AnchoredPosition.y
