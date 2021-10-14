@@ -580,7 +580,7 @@ MonoBehaviour:
   PlayerArea: {fileID: 532804909}
   OpponentArea: {fileID: 904760442}
   DealArea: {fileID: 748076121}
-  DotSprite: {fileID: 21300000, guid: 58a6fa163441e394b9314852f056a89a, type: 3}
+  DotSprite: {fileID: 21300000, guid: cfe7b47b11f8c264baee2e3360ba1a3c, type: 3}
 --- !u!1 &2141794267
 GameObject:
   m_ObjectHideFlags: 0
