@@ -9,6 +9,7 @@ public class DrawCards : MonoBehaviour
     public GameObject PlayerArea;
     public GameObject OpponentArea;
     public GameObject DealArea;
+    public Sprite DotSprite;
 
     List<GameObject> tiles = new List<GameObject>();
 
@@ -23,6 +24,7 @@ public class DrawCards : MonoBehaviour
         for (int i = 0; i < 13; i++)
         {
             GameObject playerTile = Instantiate(tiles[Random.Range(0, tiles.Count)], new Vector3(0, 0, 0), Quaternion.identity);
+            //playerTile.getComponent("Image").image = DotSprite;
             playerTile.transform.SetParent(PlayerArea.transform, false);
 
             GameObject opponentTile = Instantiate(tiles[Random.Range(0, tiles.Count)], new Vector3(0, 0, 0), Quaternion.identity);
