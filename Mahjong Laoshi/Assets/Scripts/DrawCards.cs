@@ -7,6 +7,8 @@ public class DrawCards : MonoBehaviour
 {
     public GameObject Dot1;
     public GameObject Bam8;
+
+    public GameObject Tile;
     public GameObject PlayerArea;
     public GameObject OpponentArea;
     public GameObject DealArea;
