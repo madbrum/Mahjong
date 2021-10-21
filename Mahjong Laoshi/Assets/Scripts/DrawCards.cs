@@ -58,22 +58,24 @@ public class DrawCards : MonoBehaviour
             //Resources.loadAll
             //playerTile.GetComponent<Image>().sprite = DotSprite;
 
-            int randomIndex = Random.Range(0, 8);
+            int randomIndex = Random.Range(0, tiles.Count);
             Debug.Log("Index is " + randomIndex);
             Debug.Log("Tile list count is " + tiles.Count);
             GameObject playerTile = tiles[randomIndex];
             tiles.RemoveAt(randomIndex);
+            Debug.Log("Tile list count is " + tiles.Count);
             playerTile.hideFlags = HideFlags.None;
             playerTile.SetActive(true);
             playerTile.transform.SetParent(PlayerArea.transform, false);
 
 
             //GameObject opponentTile = Instantiate(tiles[Random.Range(0, tiles.Count)], new Vector3(0, 0, 0), Quaternion.identity);
-            int randomOppIndex = Random.Range(8, 16);
+            int randomOppIndex = Random.Range(0, tiles.Count);
             Debug.Log("Index is " + randomOppIndex);
             Debug.Log("Tile list count is " + tiles.Count);
             GameObject opponentTile = tiles[randomOppIndex];
             tiles.RemoveAt(randomOppIndex);
+            Debug.Log("Tile list count is " + tiles.Count);
             opponentTile.hideFlags = HideFlags.None;
             opponentTile.SetActive(true);
             opponentTile.transform.SetParent(OpponentArea.transform, false);
