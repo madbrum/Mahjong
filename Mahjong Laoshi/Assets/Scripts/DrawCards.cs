@@ -15,7 +15,7 @@ public class DrawCards : MonoBehaviour
     //public Sprite DotSprite;
 
     private List<GameObject> tiles = new List<GameObject>();
-    private Object[] TileSprites;
+    private Sprite[] TileSprites;
 
     //List<GameObject> tiles = new List<GameObject>();
 
@@ -23,8 +23,10 @@ public class DrawCards : MonoBehaviour
     {
         //KEY THING is that you can't just randomize these tiles! there are only a set number of dot, bam, ect tiles that exist! no dupes beyond a certain point! maybe a counter?  
         //eventually you will also need to tag these with type identities and probably make a new tile array but o well
-        TileSprites = Resources.LoadAll("TileSprites");
+        TileSprites = Resources.LoadAll<Sprite>("TileSprites");
+        //DEBUGGING:
         Debug.Log("Sprites Loaded, Size " + TileSprites.Length);
+        Debug.Log("Spite 1 is " + TileSprites[0].ToString());
         for (int i = 0; i < TileSprites.Length; i++)
         {
             //create a Tile GameObject, load it with the current tile sprite
@@ -35,11 +37,7 @@ public class DrawCards : MonoBehaviour
             for (int j = 0; j < 4; j++)
             {
                 GameObject single = Instantiate(Tile, new Vector3(0, 0, 0), Quaternion.identity);
-
-                Texture2D texture = TileSprites[i] as Texture2D;
-                Debug.Log(texture.width + " is width of image as texture");
-                Sprite newSprite = Sprite.Create(texture, new Rect(0f, 0f, texture.width, texture.height), Vector2.zero);
-                single.GetComponent<Image>().sprite = newSprite;
+                single.GetComponent<Image>().sprite = TileSprites[i];
                 //single.GetComponent<Image>().sprite = TileSprites[i];
                 single.hideFlags = HideFlags.HideInHierarchy;
                 single.SetActive(false);
