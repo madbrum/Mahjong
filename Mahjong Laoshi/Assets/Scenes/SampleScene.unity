@@ -564,6 +564,11 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 845162184}
   m_CullTransparentMesh: 1
+--- !u!1 &846967441 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 9121404178174492040, guid: dac8a4c91b831794189302b9d34ced31, type: 3}
+  m_PrefabInstance: {fileID: 1976985094}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1210642125
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -816,6 +821,11 @@ MonoBehaviour:
   m_Spacing: {x: 0, y: 0}
   m_Constraint: 2
   m_ConstraintCount: 3
+--- !u!1 &1333076801 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 9121404178174492040, guid: dac8a4c91b831794189302b9d34ced31, type: 3}
+  m_PrefabInstance: {fileID: 1367692464}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1339549115 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 9121404178174492040, guid: dac8a4c91b831794189302b9d34ced31, type: 3}
@@ -833,6 +843,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 598651108}
     m_Modifications:
+    - target: {fileID: -7518459550990807148, guid: dac8a4c91b831794189302b9d34ced31, type: 3}
+      propertyPath: m_Constraint
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -7518459550990807148, guid: dac8a4c91b831794189302b9d34ced31, type: 3}
+      propertyPath: m_StartCorner
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 9121404178174492040, guid: dac8a4c91b831794189302b9d34ced31, type: 3}
       propertyPath: m_Name
       value: Player Area 4
@@ -1074,8 +1092,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Tile: {fileID: 6550876895091395685, guid: c4c5bc61080c8364da697bdccef86d94, type: 3}
-  PlayerArea: {fileID: 1799264390}
-  OpponentArea: {fileID: 1339549115}
+  EastArea: {fileID: 1799264390}
+  SouthArea: {fileID: 846967441}
+  WestArea: {fileID: 1339549115}
+  NorthArea: {fileID: 1333076801}
   DealArea: {fileID: 1321143238}
 --- !u!1 &1799264390 stripped
 GameObject:
@@ -1094,6 +1114,18 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 598651108}
     m_Modifications:
+    - target: {fileID: -7518459550990807148, guid: dac8a4c91b831794189302b9d34ced31, type: 3}
+      propertyPath: m_StartAxis
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -7518459550990807148, guid: dac8a4c91b831794189302b9d34ced31, type: 3}
+      propertyPath: m_Constraint
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -7518459550990807148, guid: dac8a4c91b831794189302b9d34ced31, type: 3}
+      propertyPath: m_StartCorner
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 9121404178174492040, guid: dac8a4c91b831794189302b9d34ced31, type: 3}
       propertyPath: m_Name
       value: Player Area 2

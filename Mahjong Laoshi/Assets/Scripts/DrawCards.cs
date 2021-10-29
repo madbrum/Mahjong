@@ -8,6 +8,8 @@ public class DrawCards : MonoBehaviour
     public GameObject Tile;
     public GameObject EastArea;
     public GameObject SouthArea;
+    public GameObject WestArea;
+    public GameObject NorthArea;
     public GameObject DealArea;
 
     private List<GameObject> tiles = new List<GameObject>();
@@ -42,11 +44,25 @@ public class DrawCards : MonoBehaviour
 
 
             int randomOppIndex = Random.Range(0, tiles.Count);
+            GameObject westTile = tiles[randomOppIndex];
+            tiles.RemoveAt(randomOppIndex);
+            westTile.hideFlags = HideFlags.None;
+            westTile.SetActive(true);
+            westTile.transform.SetParent(WestArea.transform, false);
+
+            randomOppIndex = Random.Range(0, tiles.Count);
             GameObject southTile = tiles[randomOppIndex];
             tiles.RemoveAt(randomOppIndex);
             southTile.hideFlags = HideFlags.None;
             southTile.SetActive(true);
             southTile.transform.SetParent(SouthArea.transform, false);
+
+            randomOppIndex = Random.Range(0, tiles.Count);
+            GameObject northTile = tiles[randomOppIndex];
+            tiles.RemoveAt(randomOppIndex);
+            northTile.hideFlags = HideFlags.None;
+            northTile.SetActive(true);
+            northTile.transform.SetParent(NorthArea.transform, false);
         }
     }
 }
