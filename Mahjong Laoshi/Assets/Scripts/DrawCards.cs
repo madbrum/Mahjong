@@ -15,6 +15,11 @@ public class DrawCards : MonoBehaviour
     private List<GameObject> tiles = new List<GameObject>();
     private Sprite[] TileSprites;
 
+    private List<GameObject> eastTiles = new List<GameObject>();
+    private List<GameObject> southTiles = new List<GameObject>();
+    private List<GameObject> westTiles = new List<GameObject>();
+    private List<GameObject> northTiles = new List<GameObject>();
+
     void Start()
     {
         TileSprites = Resources.LoadAll<Sprite>("TileSprites");
@@ -37,6 +42,7 @@ public class DrawCards : MonoBehaviour
         {
             int randomIndex = Random.Range(0, tiles.Count);
             GameObject eastTile = tiles[randomIndex];
+            eastTiles.Add(eastTile);
             tiles.RemoveAt(randomIndex);
             eastTile.hideFlags = HideFlags.None;
             eastTile.SetActive(true);
@@ -45,6 +51,7 @@ public class DrawCards : MonoBehaviour
 
             int randomOppIndex = Random.Range(0, tiles.Count);
             GameObject westTile = tiles[randomOppIndex];
+            westTiles.Add(westTile);
             tiles.RemoveAt(randomOppIndex);
             westTile.hideFlags = HideFlags.None;
             westTile.SetActive(true);
@@ -52,6 +59,7 @@ public class DrawCards : MonoBehaviour
 
             randomOppIndex = Random.Range(0, tiles.Count);
             GameObject southTile = tiles[randomOppIndex];
+            southTiles.Add(southTile);
             tiles.RemoveAt(randomOppIndex);
             southTile.hideFlags = HideFlags.None;
             southTile.SetActive(true);
@@ -59,6 +67,7 @@ public class DrawCards : MonoBehaviour
 
             randomOppIndex = Random.Range(0, tiles.Count);
             GameObject northTile = tiles[randomOppIndex];
+            northTiles.Add(northTile);
             tiles.RemoveAt(randomOppIndex);
             northTile.hideFlags = HideFlags.None;
             northTile.SetActive(true);
