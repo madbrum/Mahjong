@@ -15,10 +15,17 @@ public class DrawCards : MonoBehaviour
     private List<GameObject> tiles = new List<GameObject>();
     private Sprite[] TileSprites;
 
+    private GameManager gameManager;
+
     private List<GameObject> eastTiles = new List<GameObject>();
     private List<GameObject> southTiles = new List<GameObject>();
     private List<GameObject> westTiles = new List<GameObject>();
     private List<GameObject> northTiles = new List<GameObject>();
+
+    private void Awake()
+    {
+        gameManager = GameManager.Instance;
+    }
 
     void Start()
     {
@@ -40,38 +47,61 @@ public class DrawCards : MonoBehaviour
     {
         for (int i = 0; i < 13; i++)
         {
-            int randomIndex = Random.Range(0, tiles.Count);
-            GameObject eastTile = tiles[randomIndex];
-            eastTiles.Add(eastTile);
-            tiles.RemoveAt(randomIndex);
-            eastTile.hideFlags = HideFlags.None;
-            eastTile.SetActive(true);
-            eastTile.transform.SetParent(EastArea.transform, false);
+            /*  int randomIndex = Random.Range(0, tiles.Count);
+              GameObject eastTile = tiles[randomIndex];
+              eastTiles.Add(eastTile);
+              tiles.RemoveAt(randomIndex);
+              eastTile.hideFlags = HideFlags.None;
+              eastTile.SetActive(true);
+              eastTile.transform.SetParent(EastArea.transform, false);
 
 
-            int randomOppIndex = Random.Range(0, tiles.Count);
-            GameObject westTile = tiles[randomOppIndex];
-            westTiles.Add(westTile);
-            tiles.RemoveAt(randomOppIndex);
-            westTile.hideFlags = HideFlags.None;
-            westTile.SetActive(true);
-            westTile.transform.SetParent(WestArea.transform, false);
+              int randomOppIndex = Random.Range(0, tiles.Count);
+              GameObject westTile = tiles[randomOppIndex];
+              westTiles.Add(westTile);
+              tiles.RemoveAt(randomOppIndex);
+              westTile.hideFlags = HideFlags.None;
+              westTile.SetActive(true);
+              westTile.transform.SetParent(WestArea.transform, false);
 
-            randomOppIndex = Random.Range(0, tiles.Count);
-            GameObject southTile = tiles[randomOppIndex];
-            southTiles.Add(southTile);
-            tiles.RemoveAt(randomOppIndex);
-            southTile.hideFlags = HideFlags.None;
-            southTile.SetActive(true);
-            southTile.transform.SetParent(SouthArea.transform, false);
+              randomOppIndex = Random.Range(0, tiles.Count);
+              GameObject southTile = tiles[randomOppIndex];
+              southTiles.Add(southTile);
+              tiles.RemoveAt(randomOppIndex);
+              southTile.hideFlags = HideFlags.None;
+              southTile.SetActive(true);
+              southTile.transform.SetParent(SouthArea.transform, false);
 
-            randomOppIndex = Random.Range(0, tiles.Count);
-            GameObject northTile = tiles[randomOppIndex];
-            northTiles.Add(northTile);
-            tiles.RemoveAt(randomOppIndex);
-            northTile.hideFlags = HideFlags.None;
-            northTile.SetActive(true);
-            northTile.transform.SetParent(NorthArea.transform, false);
+              randomOppIndex = Random.Range(0, tiles.Count);
+              GameObject northTile = tiles[randomOppIndex];
+              northTiles.Add(northTile);
+              tiles.RemoveAt(randomOppIndex);
+              northTile.hideFlags = HideFlags.None;
+              northTile.SetActive(true);
+              northTile.transform.SetParent(NorthArea.transform, false);
+            */
+            dealSingle(eastTiles, EastArea);
+            dealSingle(southTiles, SouthArea);
+            dealSingle(westTiles, WestArea);
+            dealSingle(northTiles, NorthArea);
         }
+        gameManager.initHand(eastTiles, "east");
+        gameManager.initHand(southTiles, "south");
+        gameManager.initHand(westTiles, "west");
+        gameManager.initHand(northTiles, "north");
+
+        gameManager.testState();
+    }
+
+    private void dealSingle(List<GameObject> hand, GameObject area)
+    {
+        //1=east 2=south 3=west 4=north
+        int randomIndex = Random.Range(0, tiles.Count);
+        GameObject single = tiles[randomIndex];
+        hand.Add(single);
+        tiles.RemoveAt(randomIndex);
+        single.hideFlags = HideFlags.None;
+        single.SetActive(true);
+        single.transform.SetParent(area.transform, false);
     }
 }
