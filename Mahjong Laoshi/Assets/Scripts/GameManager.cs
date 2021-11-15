@@ -4,10 +4,12 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
+    private List<GameObject> leftovers = new List<GameObject>();
     private List<GameObject> eastTiles = new List<GameObject>();
     private List<GameObject> southTiles = new List<GameObject>();
     private List<GameObject> westTiles = new List<GameObject>();
     private List<GameObject> northTiles = new List<GameObject>();
+    private List<GameObject> discardPile = new List<GameObject>();
 
     public static GameManager Instance { get; private set; }
     private void Awake()
@@ -28,7 +30,7 @@ public class GameManager : MonoBehaviour
         {
             eastTiles = hand;
         }
-        if (player.Equals("south"));
+        if (player.Equals("south"))
         {
             southTiles = hand;
         }
@@ -40,6 +42,10 @@ public class GameManager : MonoBehaviour
         {
             northTiles = hand;
         }
+        if (player.Equals("leftover"))
+        {
+            leftovers = hand;
+        }
     }
 
     public void testState()
@@ -48,5 +54,6 @@ public class GameManager : MonoBehaviour
         Debug.Log("South Size equals " + southTiles.Count);
         Debug.Log("West Size equals " + westTiles.Count);
         Debug.Log("North Size equals " + northTiles.Count);
+        Debug.Log("Leftover Tiles Size equals " + leftovers.Count);
     }
 }

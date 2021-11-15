@@ -51,7 +51,7 @@ public class DragDrop : MonoBehaviour
         if (inDropZone)
         {
             transform.SetParent(dropZone.transform, false);
-            Debug.Log(transform.position + "deviates from" + dropZone.transform.position);
+            Debug.Log("ID of Tile is " + gameObject.GetComponent<TileProperties>().getID() + ", Value of Tile is " + gameObject.GetComponent<TileProperties>().getValue());
         }
         else
         {
