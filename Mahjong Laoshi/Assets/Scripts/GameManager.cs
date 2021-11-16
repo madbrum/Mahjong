@@ -10,6 +10,7 @@ public class GameManager : MonoBehaviour
     private List<GameObject> westTiles = new List<GameObject>();
     private List<GameObject> northTiles = new List<GameObject>();
     private List<GameObject> discardPile = new List<GameObject>();
+    //hash table? so you don't have to convert to string every time? idk
 
     public static GameManager Instance { get; private set; }
     private void Awake()
@@ -26,25 +27,59 @@ public class GameManager : MonoBehaviour
 
     public void initHand(List<GameObject> hand, string player)
     {
-        if (player.Equals("east"))
+        List<GameObject> destination = determineHand(player);
+        destination = hand;
+    }
+
+    public void switchHand(int id, int value, string originP, string destinationP)
+    {
+        List<GameObject> origin = determineHand(originP);
+        List<GameObject> destination = determineHand(destinationP);
+        GameObject tile = origin[getTileIndex(id, value, origin)];
+        origin.Remove(tile);
+        destination.Add(tile);
+    }
+
+    private int getTileIndex(int id, int value, List<GameObject> hand)
+    {
+        int tileIndex = 0;
+        for (int i = 0; i < hand.Count; i++)
         {
-            eastTiles = hand;
+            TileProperties props = hand[i].GetComponent<TileProperties>();
+            if (props.getID() == id && props.getValue() == value)
+            {
+                tileIndex = i;
+                break;
+            }
         }
-        if (player.Equals("south"))
+        return tileIndex;
+    }
+
+    private List<GameObject> determineHand(string hand)
+    {
+        if (hand.Equals("east"))
         {
-            southTiles = hand;
+            return eastTiles;
         }
-        if (player.Equals("west"))
+        if (hand.Equals("south"))
         {
-            westTiles = hand;
+            return southTiles;
         }
-        if (player.Equals("north"))
+        if (hand.Equals("west"))
         {
-            northTiles = hand;
+            return westTiles;
         }
-        if (player.Equals("leftover"))
+        if (hand.Equals("north"))
         {
-            leftovers = hand;
+            return northTiles;
+        }
+        if (hand.Equals("leftover"))
+        {
+            return leftovers;
+        }
+        else
+        {
+            return discardPile;
         }
     }
 

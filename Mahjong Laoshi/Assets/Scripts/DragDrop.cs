@@ -10,7 +10,7 @@ public class DragDrop : MonoBehaviour
     private GameObject dropZone; 
     private Vector2 startPosition;
     private GameObject startParent;
-
+    GameManager gameManager = GameManager.Instance;
     private void Awake()
     {
         canvas = GameObject.Find("Main Canvas");
