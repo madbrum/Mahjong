@@ -27,8 +27,29 @@ public class GameManager : MonoBehaviour
 
     public void initHand(List<GameObject> hand, string player)
     {
-        List<GameObject> destination = determineHand(player);
-        destination = hand;
+        //List<GameObject> destination = determineHand(player);
+        //destination = hand;
+
+        if (player.Equals("east"))
+        {
+            eastTiles = hand;
+        }
+        if (player.Equals("south"))
+        {
+            southTiles = hand;
+        }
+        if (player.Equals("west"))
+        {
+            westTiles = hand;
+        }
+        if (player.Equals("north"))
+        {
+            northTiles = hand;
+        }
+        if (player.Equals("leftover"))
+        {
+            leftovers = hand;
+        }
     }
 
     public void switchHand(int id, int value, string originP, string destinationP)
@@ -55,25 +76,26 @@ public class GameManager : MonoBehaviour
         return tileIndex;
     }
 
-    private List<GameObject> determineHand(string hand)
+    
+    private List<GameObject> determineHand(string player)
     {
-        if (hand.Equals("east"))
+        if (player.Equals("east"))
         {
             return eastTiles;
         }
-        if (hand.Equals("south"))
+        if (player.Equals("south"))
         {
             return southTiles;
         }
-        if (hand.Equals("west"))
+        if (player.Equals("west"))
         {
             return westTiles;
         }
-        if (hand.Equals("north"))
+        if (player.Equals("north"))
         {
             return northTiles;
         }
-        if (hand.Equals("leftover"))
+        if (player.Equals("leftover"))
         {
             return leftovers;
         }
@@ -82,6 +104,7 @@ public class GameManager : MonoBehaviour
             return discardPile;
         }
     }
+   
 
     public void testState()
     {
