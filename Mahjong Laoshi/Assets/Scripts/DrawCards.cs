@@ -55,11 +55,11 @@ public class DrawCards : MonoBehaviour
             dealSingle(westTiles, WestArea);
             dealSingle(northTiles, NorthArea);
         }
-        gameManager.initHand(eastTiles, "east");
-        gameManager.initHand(southTiles, "south");
-        gameManager.initHand(westTiles, "west");
-        gameManager.initHand(northTiles, "north");
-        gameManager.initHand(tiles, "leftover");
+        gameManager.initHand(eastTiles, GameManager.EAST);
+        gameManager.initHand(southTiles, GameManager.SOUTH);
+        gameManager.initHand(westTiles, GameManager.WEST);
+        gameManager.initHand(northTiles, GameManager.NORTH);
+        gameManager.initHand(tiles, GameManager.LEFTOVER);
 
         gameManager.testState();
     }

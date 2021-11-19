@@ -775,7 +775,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1812781198673711290, guid: b88ad9d8b2f1b544a8e170b43b741673, type: 3}
       propertyPath: m_Name
-      value: Dealing Area Square
+      value: Dealing Area 6
       objectReference: {fileID: 0}
     - target: {fileID: 3116930356804027986, guid: b88ad9d8b2f1b544a8e170b43b741673, type: 3}
       propertyPath: m_Size.x
