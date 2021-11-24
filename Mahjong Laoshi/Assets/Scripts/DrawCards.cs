@@ -62,6 +62,8 @@ public class DrawCards : MonoBehaviour
         gameManager.initHand(tiles, GameManager.LEFTOVER);
 
         gameManager.testState();
+
+        GameObject.Destroy(gameObject);
     }
 
     private void dealSingle(List<GameObject> hand, GameObject area)
