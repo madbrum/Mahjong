@@ -58,6 +58,10 @@ public class DragDrop : MonoBehaviour
             int originHand = int.Parse(origin.Substring(origin.Length - 2)) - 1;
             int destHand = int.Parse(destination.Substring(destination.Length - 2)) - 1;
             gameManager.moveTile(gameObject.GetComponent<TileProperties>().getID(), gameObject.GetComponent<TileProperties>().getValue(), originHand, destHand);
+            if (destHand == GameManager.DISCARD)
+            {
+                gameManager.logDiscard();
+            }
         }
         else
         {

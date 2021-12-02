@@ -6,6 +6,8 @@ using UnityEngine.UI;
 public class DrawCards : MonoBehaviour
 {
     public GameObject Tile;
+    public GameObject Wall;
+
     public GameObject EastArea;
     public GameObject SouthArea;
     public GameObject WestArea;
@@ -61,8 +63,16 @@ public class DrawCards : MonoBehaviour
         gameManager.initHand(northTiles, GameManager.NORTH);
         gameManager.initHand(tiles, GameManager.LEFTOVER);
 
+        gameManager.initArea(EastArea, GameManager.EAST);
+        gameManager.initArea(SouthArea, GameManager.SOUTH);
+        gameManager.initArea(WestArea, GameManager.WEST);
+        gameManager.initArea(NorthArea, GameManager.NORTH);
+        gameManager.initArea(DealArea, GameManager.DISCARD);
+
         gameManager.testState();
 
+        Wall.hideFlags = HideFlags.None;
+        Wall.SetActive(true);
         GameObject.Destroy(gameObject);
     }
 

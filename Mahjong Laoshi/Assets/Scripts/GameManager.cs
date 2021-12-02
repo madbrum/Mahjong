@@ -8,10 +8,15 @@ public class GameManager : MonoBehaviour
     public static int SOUTH { get; private set; } = 1;
     public static int WEST { get; private set; } = 2;
     public static int NORTH { get; private set; } = 3;
-    public static int LEFTOVER { get; private set; } = 4;
-    public static int DISCARD { get; private set; } = 5;
+    public static int DISCARD { get; private set; } = 4;
+    public static int LEFTOVER { get; private set; } = 5;
 
     private List<GameObject>[] hands = new List<GameObject>[6];
+    private GameObject[] areas = new GameObject[5];
+
+    private int currentPlayer = EAST;
+    private bool drawn = false;
+    private bool discarded = false;
 
     public static GameManager Instance { get; private set; }
     private void Awake()
@@ -27,9 +32,38 @@ public class GameManager : MonoBehaviour
         hands[DISCARD] = new List<GameObject>();
     }
 
+    public int getCurrentPlayer()
+    {
+        return currentPlayer;
+    }
+
+    public GameObject getArea(int player)
+    {
+        return areas[player];
+    }
+
+    public List<GameObject> getHand(int player)
+    {
+        return hands[player];
+    }
+
+    public void logDiscard()
+    {
+        discarded = true;
+    }
+
+    public void logDraw()
+    {
+        drawn = true;
+    }
+
     public void initHand(List<GameObject> hand, int player)
     {
         hands[player] = hand;
+    }
+    public void initArea(GameObject area, int player)
+    {
+        areas[player] = area;
     }
 
     public void moveTile(int id, int value, int originP, int destinationP)
@@ -55,6 +89,14 @@ public class GameManager : MonoBehaviour
         return tileIndex;
     }
 
+    private void Update()
+    {
+        if (drawn && discarded)
+        {
+            currentPlayer = currentPlayer + 1 % 4;
+        }
+    }
+
     public void testState()
     {
         Debug.Log("East Size equals " + hands[EAST].Count);
@@ -63,5 +105,8 @@ public class GameManager : MonoBehaviour
         Debug.Log("North Size equals " + hands[NORTH].Count);
         Debug.Log("Leftover Tiles Size equals " + hands[LEFTOVER].Count);
         Debug.Log("Discarded Tiles Size equals " + hands[DISCARD].Count);
+        Debug.Log("Drawn? " + drawn);
+        Debug.Log("Discarded?" + discarded);
+        Debug.Log("Current player is " + currentPlayer);
     }
 }
