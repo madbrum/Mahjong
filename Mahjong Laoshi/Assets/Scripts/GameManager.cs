@@ -94,6 +94,8 @@ public class GameManager : MonoBehaviour
         if (drawn && discarded)
         {
             currentPlayer = currentPlayer + 1 % 4;
+            drawn = false;
+            discarded = false;
         }
     }
 
@@ -106,7 +108,7 @@ public class GameManager : MonoBehaviour
         Debug.Log("Leftover Tiles Size equals " + hands[LEFTOVER].Count);
         Debug.Log("Discarded Tiles Size equals " + hands[DISCARD].Count);
         Debug.Log("Drawn? " + drawn);
-        Debug.Log("Discarded?" + discarded);
+        Debug.Log("Discarded? " + discarded);
         Debug.Log("Current player is " + currentPlayer);
     }
 }
