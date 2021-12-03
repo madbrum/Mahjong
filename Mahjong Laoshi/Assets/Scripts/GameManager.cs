@@ -12,7 +12,7 @@ public class GameManager : MonoBehaviour
     public static int LEFTOVER { get; private set; } = 5;
 
     private List<GameObject>[] hands = new List<GameObject>[6];
-    private GameObject[] areas = new GameObject[5];
+    private List<GameObject> areas = new List<GameObject>();
 
     private int currentPlayer = EAST;
     private bool drawn = false;
@@ -57,20 +57,38 @@ public class GameManager : MonoBehaviour
         drawn = true;
     }
 
+    public bool drawStatus()
+    {
+        return drawn;
+    }
+
+    public bool discardStatus()
+    {
+        return discarded;
+    }
+
     public void initHand(List<GameObject> hand, int player)
     {
         hands[player] = hand;
     }
-    public void initArea(GameObject area, int player)
+    public void initArea(GameObject area)
     {
-        areas[player] = area;
+        //areas[player] = area;
+        areas.Add(area);
     }
 
-    public void moveTile(int id, int value, int originP, int destinationP)
+    public void moveTile(int id, int value, GameObject originP, GameObject destinationP)
     {
-        GameObject tile = hands[originP][getTileIndex(id, value, originP)];
-        hands[originP].Remove(tile);
-        hands[destinationP].Add(tile);
+        int origin = getPlayerAttribute(originP);
+        int destination = getPlayerAttribute(destinationP);
+        GameObject tile = hands[origin][getTileIndex(id, value, origin)];
+        hands[origin].Remove(tile);
+        hands[destination].Add(tile);
+    }
+
+    private int getPlayerAttribute(GameObject area)
+    {
+        return areas.IndexOf(area);
     }
 
     private int getTileIndex(int id, int value, int origin)
@@ -93,7 +111,7 @@ public class GameManager : MonoBehaviour
     {
         if (drawn && discarded)
         {
-            currentPlayer = currentPlayer + 1 % 4;
+            currentPlayer = (currentPlayer + 1) % 4;
             drawn = false;
             discarded = false;
         }

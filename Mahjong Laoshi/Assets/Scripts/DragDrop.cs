@@ -42,7 +42,10 @@ public class DragDrop : MonoBehaviour
     {
         startParent = transform.parent.gameObject;
         startPosition = transform.position;
-        isDragging = true;
+        if (startParent.Equals(gameManager.getArea(gameManager.getCurrentPlayer())) && !gameManager.discardStatus())
+        {
+            isDragging = true;
+        }
     }
 
     public void endDrag()
@@ -52,13 +55,18 @@ public class DragDrop : MonoBehaviour
         {
             transform.SetParent(dropZone.transform, false);
             Debug.Log("ID of Tile is " + gameObject.GetComponent<TileProperties>().getID() + ", Value of Tile is " + gameObject.GetComponent<TileProperties>().getValue());
-            string origin = startParent.name;
-            string destination = dropZone.transform.name;
+            //string origin = startParent.name;
+            //string destination = dropZone.transform.name;
             //this really ugly code assumes the convention that the player area names always end with the player number
-            int originHand = int.Parse(origin.Substring(origin.Length - 2)) - 1;
-            int destHand = int.Parse(destination.Substring(destination.Length - 2)) - 1;
-            gameManager.moveTile(gameObject.GetComponent<TileProperties>().getID(), gameObject.GetComponent<TileProperties>().getValue(), originHand, destHand);
-            if (destHand == GameManager.DISCARD)
+            // int originHand = int.Parse(origin.Substring(origin.Length - 2)) - 1;
+            //int destHand = int.Parse(destination.Substring(destination.Length - 2)) - 1;
+            /* TODO:
+             * CHANGE MOVETILE so you don't use this dumb name parsing, just compare to the areas in the game manager 
+             * 
+             */
+            gameManager.moveTile(gameObject.GetComponent<TileProperties>().getID(), gameObject.GetComponent<TileProperties>().getValue(), startParent, dropZone);
+            //gameManager.moveTile(gameObject.GetComponent<TileProperties>().getID(), gameObject.GetComponent<TileProperties>().getValue(), originHand, destHand);
+            if (dropZone.Equals(gameManager.getArea(GameManager.DISCARD)))
             {
                 gameManager.logDiscard();
             }
