@@ -75,12 +75,16 @@ public class DrawCards : MonoBehaviour
 
         gameManager.testState();
 
+        EastWall.GetComponent<WallProperties>().setID(GameManager.EAST);
         EastWall.hideFlags = HideFlags.None;
         EastWall.SetActive(true);
+        SouthWall.GetComponent<WallProperties>().setID(GameManager.SOUTH);
         SouthWall.hideFlags = HideFlags.None;
         SouthWall.SetActive(true);
+        WestWall.GetComponent<WallProperties>().setID(GameManager.WEST);
         WestWall.hideFlags = HideFlags.None;
         WestWall.SetActive(true);
+        NorthWall.GetComponent<WallProperties>().setID(GameManager.NORTH);
         NorthWall.hideFlags = HideFlags.None;
         NorthWall.SetActive(true);
         GameObject.Destroy(gameObject);

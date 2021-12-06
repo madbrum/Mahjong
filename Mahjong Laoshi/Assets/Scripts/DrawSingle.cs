@@ -16,8 +16,8 @@ public class DrawSingle : MonoBehaviour
     public void OnClick()
     {
         Debug.Log("Clicked!");
-        int location = int.Parse(gameObject.name.Substring(gameObject.name.Length - 2));
-        if (location == gameManager.getCurrentPlayer() + 1 && !gameManager.drawStatus())
+        int location = gameObject.GetComponent<WallProperties>().getID();
+        if (location == gameManager.getCurrentPlayer() && !gameManager.drawStatus())
         {
             dealSingle();
             gameManager.logDraw();
