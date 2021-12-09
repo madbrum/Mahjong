@@ -37,6 +37,7 @@ public class DrawSingle : MonoBehaviour
         leftovers.RemoveAt(randomIndex);
         single.hideFlags = HideFlags.None;
         single.SetActive(true);
+        single.GetComponent<TileProperties>().setPlayer(currentPlayer);
         single.transform.SetParent(area.transform, false);
     }
 

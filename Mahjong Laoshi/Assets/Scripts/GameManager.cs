@@ -123,8 +123,6 @@ public class GameManager : MonoBehaviour
         Debug.Log("South Size equals " + hands[SOUTH].Count);
         Debug.Log("West Size equals " + hands[WEST].Count);
         Debug.Log("North Size equals " + hands[NORTH].Count);
-        Debug.Log("Leftover Tiles Size equals " + hands[LEFTOVER].Count);
-        Debug.Log("Discarded Tiles Size equals " + hands[DISCARD].Count);
         Debug.Log("Drawn? " + drawn);
         Debug.Log("Discarded? " + discarded);
         Debug.Log("Current player is " + currentPlayer);

@@ -55,21 +55,13 @@ public class DragDrop : MonoBehaviour
         {
             transform.SetParent(dropZone.transform, false);
             Debug.Log("ID of Tile is " + gameObject.GetComponent<TileProperties>().getID() + ", Value of Tile is " + gameObject.GetComponent<TileProperties>().getValue());
-            //string origin = startParent.name;
-            //string destination = dropZone.transform.name;
-            //this really ugly code assumes the convention that the player area names always end with the player number
-            // int originHand = int.Parse(origin.Substring(origin.Length - 2)) - 1;
-            //int destHand = int.Parse(destination.Substring(destination.Length - 2)) - 1;
-            /* TODO:
-             * CHANGE MOVETILE so you don't use this dumb name parsing, just compare to the areas in the game manager 
-             * 
-             */
             gameManager.moveTile(gameObject.GetComponent<TileProperties>().getID(), gameObject.GetComponent<TileProperties>().getValue(), startParent, dropZone);
-            //gameManager.moveTile(gameObject.GetComponent<TileProperties>().getID(), gameObject.GetComponent<TileProperties>().getValue(), originHand, destHand);
-            if (dropZone.Equals(gameManager.getArea(GameManager.DISCARD)) && gameObject.GetComponent<TileProperties>().getPlayer() != GameManager.DISCARD)
+            if (dropZone.Equals(gameManager.getArea(GameManager.DISCARD)) && gameObject.GetComponent<TileProperties>().getPlayer() == gameManager.getCurrentPlayer())
             {
                 gameManager.logDiscard();
-                gameObject.GetComponent<TileProperties>().setPlayer(GameManager.DISCARD);
+                //the player of the tile isn't updated because when claiming discard it'll check if the id is of the person who just went, so current player - 1.
+                //but you can't pick up any tile of that player at any time, just their last one
+                //so it needs to update eventually
             }
         }
         else
