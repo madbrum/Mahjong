@@ -6,6 +6,7 @@ public class TileProperties : MonoBehaviour
 {
     private int tileID;
     private int tileValue;
+    private int originPlayer;
 
     public void setID(int ID)
     {
@@ -16,6 +17,11 @@ public class TileProperties : MonoBehaviour
     {
         tileValue = value;
     }
+    
+    public void setPlayer(int player)
+    {
+        originPlayer = player;
+    }
 
     public int getID()
     {
@@ -25,5 +31,10 @@ public class TileProperties : MonoBehaviour
     public int getValue()
     {
         return tileValue;
+    }
+
+    public int getPlayer()
+    {
+        return originPlayer;
     }
 }

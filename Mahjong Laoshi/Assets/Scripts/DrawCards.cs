@@ -56,10 +56,10 @@ public class DrawCards : MonoBehaviour
     {
         for (int i = 0; i < 13; i++)
         {
-            dealSingle(eastTiles, EastArea);
-            dealSingle(southTiles, SouthArea);
-            dealSingle(westTiles, WestArea);
-            dealSingle(northTiles, NorthArea);
+            dealSingle(eastTiles, EastArea, GameManager.EAST);
+            dealSingle(southTiles, SouthArea, GameManager.SOUTH);
+            dealSingle(westTiles, WestArea, GameManager.WEST);
+            dealSingle(northTiles, NorthArea, GameManager.NORTH);
         }
         gameManager.initHand(eastTiles, GameManager.EAST);
         gameManager.initHand(southTiles, GameManager.SOUTH);
@@ -90,7 +90,7 @@ public class DrawCards : MonoBehaviour
         GameObject.Destroy(gameObject);
     }
 
-    private void dealSingle(List<GameObject> hand, GameObject area)
+    private void dealSingle(List<GameObject> hand, GameObject area, int player)
     {
         //1=east 2=south 3=west 4=north
         int randomIndex = Random.Range(0, tiles.Count);
@@ -99,6 +99,7 @@ public class DrawCards : MonoBehaviour
         tiles.RemoveAt(randomIndex);
         single.hideFlags = HideFlags.None;
         single.SetActive(true);
+        single.GetComponent<TileProperties>().setPlayer(player);
         single.transform.SetParent(area.transform, false);
     }
 }
