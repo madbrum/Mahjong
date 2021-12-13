@@ -56,9 +56,10 @@ public class DragDrop : MonoBehaviour
             transform.SetParent(dropZone.transform, false);
             Debug.Log("ID of Tile is " + gameObject.GetComponent<TileProperties>().getID() + ", Value of Tile is " + gameObject.GetComponent<TileProperties>().getValue());
             gameManager.moveTile(gameObject.GetComponent<TileProperties>().getID(), gameObject.GetComponent<TileProperties>().getValue(), startParent, dropZone);
-            if (dropZone.Equals(gameManager.getArea(GameManager.DISCARD)) && gameObject.GetComponent<TileProperties>().getPlayer() == gameManager.getCurrentPlayer())
+            if (dropZone.Equals(gameManager.getArea(GameManager.DISCARD)) && !gameObject.GetComponent<TileProperties>().getDiscard())
             {
                 gameManager.logDiscard();
+                gameObject.GetComponent<TileProperties>().setDiscard(true);
                 //the player of the tile isn't updated because when claiming discard it'll check if the id is of the person who just went, so current player - 1.
                 //but you can't pick up any tile of that player at any time, just their last one
                 //so it needs to update eventually
@@ -70,5 +71,6 @@ public class DragDrop : MonoBehaviour
             transform.SetParent(startParent.transform, false);
         }
         gameManager.testState();
+        Debug.Log("Tile player is " + gameObject.GetComponent<TileProperties>().getPlayer());
     }
 }
