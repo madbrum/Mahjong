@@ -57,7 +57,7 @@ public class TileProperties : MonoBehaviour
         //so you only keep them as long as you need for comparison to the turn number. then ids change when they switch hands, ect...
 
         //plus 2 because + 1 means it's just the next player after the discarder, and if they haven't done anything yet this is the only chance you have to steal discard 
-        if (discarded && gameManager.getCurrentPlayer() >= (originPlayer + 1) % 4 && gameManager.drawStatus())
+        if (discarded && gameManager.getCurrentPlayer() >= ((originPlayer + 1) % 4) && gameManager.drawStatus())
         {
             originPlayer = GameManager.DISCARD;
         }

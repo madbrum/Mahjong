@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
@@ -17,6 +18,8 @@ public class GameManager : MonoBehaviour
     private int currentPlayer = EAST;
     private bool drawn = false;
     private bool discarded = false;
+
+    public GameObject currentPlayerIndicator;
 
     public static GameManager Instance { get; private set; }
     private void Awake()
@@ -67,6 +70,11 @@ public class GameManager : MonoBehaviour
         return discarded;
     }
 
+    public void logPlayer(int player)
+    {
+        currentPlayer = player;
+    }
+
     public void initHand(List<GameObject> hand, int player)
     {
         hands[player] = hand;
@@ -86,7 +94,7 @@ public class GameManager : MonoBehaviour
         hands[destination].Add(tile);
     }
 
-    private int getPlayerAttribute(GameObject area)
+    public int getPlayerAttribute(GameObject area)
     {
         return areas.IndexOf(area);
     }
@@ -114,6 +122,24 @@ public class GameManager : MonoBehaviour
             currentPlayer = (currentPlayer + 1) % 4;
             drawn = false;
             discarded = false;
+            string txt = "";
+            if (currentPlayer == EAST)
+            {
+                txt = "EAST";
+            }
+            if (currentPlayer == SOUTH)
+            {
+                txt = "SOUTH";
+            }
+            if (currentPlayer == WEST)
+            {
+                txt = "WEST";
+            }
+            if (currentPlayer == NORTH)
+            {
+                txt = "NORTH";
+            }
+            currentPlayerIndicator.GetComponent<Text>().text = "Current Player: " + txt;
         }
     }
 

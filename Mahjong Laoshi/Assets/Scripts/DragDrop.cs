@@ -42,7 +42,7 @@ public class DragDrop : MonoBehaviour
     {
         startParent = transform.parent.gameObject;
         startPosition = transform.position;
-        if (startParent.Equals(gameManager.getArea(gameManager.getCurrentPlayer())) && !gameManager.discardStatus())
+        if ((startParent.Equals(gameManager.getArea(gameManager.getCurrentPlayer())) && !gameManager.discardStatus()) && gameManager.drawStatus() || (startParent.Equals(gameManager.getArea(GameManager.DISCARD)) && !gameManager.drawStatus() && gameObject.GetComponent<TileProperties>().getPlayer() < 4))
         {
             isDragging = true;
         }
@@ -63,6 +63,14 @@ public class DragDrop : MonoBehaviour
                 //the player of the tile isn't updated because when claiming discard it'll check if the id is of the person who just went, so current player - 1.
                 //but you can't pick up any tile of that player at any time, just their last one
                 //so it needs to update eventually
+            }
+            else if (!dropZone.Equals(gameManager.getArea(GameManager.DISCARD)) && gameObject.GetComponent<TileProperties>().getDiscard() && gameObject.GetComponent<TileProperties>().getPlayer() != gameManager.getPlayerAttribute(dropZone))
+            {
+                gameManager.logDraw();
+                int player = gameManager.getPlayerAttribute(dropZone);
+                gameObject.GetComponent<TileProperties>().setPlayer(player);
+                gameObject.GetComponent<TileProperties>().setDiscard(false);
+                gameManager.logPlayer(player);
             }
         }
         else
