@@ -19,9 +19,29 @@ public class GameManager : MonoBehaviour
     private bool drawn = false;
     private bool discarded = false;
 
-    public GameObject currentPlayerIndicator;
-
     public static GameManager Instance { get; private set; }
+
+    private class TileComparer : IComparer<GameObject>
+    {
+        public int Compare(GameObject tile1, GameObject tile2)
+        {
+            int tile1Value = tile1.GetComponent<TileProperties>().getValue();
+            int tile2Value = tile2.GetComponent<TileProperties>().getValue();
+            if (tile1Value > tile2Value)
+            {
+                return 1;
+            }
+            else if (tile1Value == tile2Value)
+            {
+                return 0;
+            }
+            else
+            {
+                return -1;
+            }
+        }
+    }
+
     private void Awake()
     {
         if (Instance == null)
@@ -99,6 +119,32 @@ public class GameManager : MonoBehaviour
         return areas.IndexOf(area);
     }
 
+    public bool checkValidMeld(GameObject tile, GameObject destination)
+    {
+        int player = getPlayerAttribute(destination);
+        List<GameObject> destHand = new List<GameObject>(hands[player]);
+        List<GameObject> tilesOfSuit = new List<GameObject>();
+        for (int i = 0; i < destHand.Count; i++)
+        {
+            if(destHand[i].GetComponent<TileProperties>().getID() == tile.GetComponent<TileProperties>().getID())
+            {
+                tilesOfSuit.Add(destHand[i]);
+            }
+        }
+        tilesOfSuit.Add(tile);
+        tilesOfSuit.Sort(new TileComparer());
+        
+        //test
+        for (int i = 0; i < tilesOfSuit.Count; i++)
+        {
+            Debug.Log(tilesOfSuit[i].GetComponent<TileProperties>().getValue());
+        }
+
+        int dupeTiles = 0;
+        int incTiles = 0;
+        return true;
+    }
+
     private int getTileIndex(int id, int value, int origin)
     {
         //if -1 returns that means the tile isn't present in this hand . probably need to add checks for this later
@@ -122,24 +168,6 @@ public class GameManager : MonoBehaviour
             currentPlayer = (currentPlayer + 1) % 4;
             drawn = false;
             discarded = false;
-            string txt = "";
-            if (currentPlayer == EAST)
-            {
-                txt = "EAST";
-            }
-            if (currentPlayer == SOUTH)
-            {
-                txt = "SOUTH";
-            }
-            if (currentPlayer == WEST)
-            {
-                txt = "WEST";
-            }
-            if (currentPlayer == NORTH)
-            {
-                txt = "NORTH";
-            }
-            currentPlayerIndicator.GetComponent<Text>().text = "Current Player: " + txt;
         }
     }
 

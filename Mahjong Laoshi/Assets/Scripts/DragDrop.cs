@@ -66,6 +66,7 @@ public class DragDrop : MonoBehaviour
             }
             else if (!dropZone.Equals(gameManager.getArea(GameManager.DISCARD)) && gameObject.GetComponent<TileProperties>().getDiscard() && gameObject.GetComponent<TileProperties>().getPlayer() != gameManager.getPlayerAttribute(dropZone))
             {
+                gameManager.checkValidMeld(gameObject, dropZone);
                 gameManager.logDraw();
                 int player = gameManager.getPlayerAttribute(dropZone);
                 gameObject.GetComponent<TileProperties>().setPlayer(player);
