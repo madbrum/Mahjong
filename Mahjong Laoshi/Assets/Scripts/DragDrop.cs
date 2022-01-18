@@ -30,12 +30,23 @@ public class DragDrop : MonoBehaviour
     {
         inDropZone = true;
         dropZone = collision.gameObject;
+        //Debug.Log("Entering " + gameManager.getPlayerAttribute(dropZone));
     }
 
     private void OnCollisionExit2D(Collision2D collision)
     {
-        inDropZone = false;
-        dropZone = null;
+        //Debug.Log("Leaving " + gameManager.getPlayerAttribute(dropZone));
+        //Debug.Log(collision.gameObject);
+        if (!collision.gameObject.Equals(dropZone) && gameManager.getPlayerAttribute(collision.gameObject) > -1)
+        {
+            inDropZone = true;
+            dropZone = collision.gameObject;
+        }
+        else
+        {
+            inDropZone = false;
+            dropZone = null;
+        }
     }
 
     public void startDrag()
@@ -51,6 +62,8 @@ public class DragDrop : MonoBehaviour
     public void endDrag()
     {
         isDragging = false;
+        //Debug.Log(gameManager.getPlayerAttribute(dropZone));
+        //Debug.Log(inDropZone);
         if (inDropZone)
         {
             transform.SetParent(dropZone.transform, false);
@@ -58,7 +71,7 @@ public class DragDrop : MonoBehaviour
             //gameManager.moveTile(gameObject.GetComponent<TileProperties>().getID(), gameObject.GetComponent<TileProperties>().getValue(), startParent, dropZone);
             if (dropZone.Equals(gameManager.getArea(GameManager.DISCARD)) && !gameObject.GetComponent<TileProperties>().getDiscard())
             {
-                Debug.Log("ID of Tile is " + gameObject.GetComponent<TileProperties>().getID() + ", Value of Tile is " + gameObject.GetComponent<TileProperties>().getValue());
+               //Debug.Log("ID of Tile is " + gameObject.GetComponent<TileProperties>().getID() + ", Value of Tile is " + gameObject.GetComponent<TileProperties>().getValue());
                 gameManager.moveTile(gameObject.GetComponent<TileProperties>().getID(), gameObject.GetComponent<TileProperties>().getValue(), startParent, dropZone);
                 gameManager.logDiscard();
                 gameObject.GetComponent<TileProperties>().setDiscard(true);
@@ -70,7 +83,7 @@ public class DragDrop : MonoBehaviour
             {
                 gameManager.checkValidMeld(gameObject, dropZone);
 
-                Debug.Log("ID of Tile is " + gameObject.GetComponent<TileProperties>().getID() + ", Value of Tile is " + gameObject.GetComponent<TileProperties>().getValue());
+                //Debug.Log("ID of Tile is " + gameObject.GetComponent<TileProperties>().getID() + ", Value of Tile is " + gameObject.GetComponent<TileProperties>().getValue());
                 gameManager.moveTile(gameObject.GetComponent<TileProperties>().getID(), gameObject.GetComponent<TileProperties>().getValue(), startParent, dropZone);
                 gameManager.logDraw();
                 int player = gameManager.getPlayerAttribute(dropZone);
@@ -78,13 +91,18 @@ public class DragDrop : MonoBehaviour
                 gameObject.GetComponent<TileProperties>().setDiscard(false);
                 gameManager.logPlayer(player);
             }
+            else
+            {
+                transform.position = startPosition;
+                transform.SetParent(startParent.transform, false);
+            }
         }
         else
         {
             transform.position = startPosition;
             transform.SetParent(startParent.transform, false);
         }
-        gameManager.testState();
-        Debug.Log("Tile player is " + gameObject.GetComponent<TileProperties>().getPlayer());
+        //gameManager.testState();
+        //Debug.Log("Tile player is " + gameObject.GetComponent<TileProperties>().getPlayer());
     }
 }

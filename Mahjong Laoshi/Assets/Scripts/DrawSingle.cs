@@ -15,14 +15,14 @@ public class DrawSingle : MonoBehaviour
     
     public void OnClick()
     {
-        Debug.Log("Clicked!");
+        //Debug.Log("Clicked!");
         int location = gameObject.GetComponent<WallProperties>().getID();
         if (location == gameManager.getCurrentPlayer() && !gameManager.drawStatus())
         {
             dealSingle();
             gameManager.logDraw();
         }
-        gameManager.testState();
+       // gameManager.testState();
     }
 
     private void dealSingle()
