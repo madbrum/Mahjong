@@ -133,9 +133,10 @@ public class GameManager : MonoBehaviour
         }
         tilesOfSuit.Add(tile);
         tilesOfSuit.Sort(new TileComparer());
+        int tileQV = tile.GetComponent<TileProperties>().getValue();
         int dupeTiles = 0;
         int incTiles = 0;
-        int prevValue = 0;
+        int prevValue = tileQV - 3;
         for (int i = 0; i < tilesOfSuit.Count; i++)
         {
             int curValue = tilesOfSuit[i].GetComponent<TileProperties>().getValue();
@@ -144,17 +145,28 @@ public class GameManager : MonoBehaviour
                 dupeTiles++;
             }
 
+
+
             //how do we make it read for this tile specifically?
-            if (curValue == prevValue + 1)
+            if (curValue >= tileQV - 2 && curValue >= prevValue + 1)
             {
                 incTiles++;
-            }
-            else
-            {
-                incTiles = 1;
+                prevValue = curValue;
             }
 
+            //if (curValue == prevValue + 1)
+            //{
+            //    incTiles++;
+            //}
+            //else
+            //{
+            //    incTiles = 1;
+            //}
+
             if (dupeTiles >= 3)
+            {
+                return true;
+            }
             prevValue = curValue;
         }
         return true;
