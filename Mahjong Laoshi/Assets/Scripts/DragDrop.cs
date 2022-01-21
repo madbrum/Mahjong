@@ -30,13 +30,13 @@ public class DragDrop : MonoBehaviour
     {
         inDropZone = true;
         dropZone = collision.gameObject;
-        //Debug.Log("Entering " + gameManager.getPlayerAttribute(dropZone));
+        Debug.Log("Entering " + gameManager.getPlayerAttribute(dropZone));
     }
 
     private void OnCollisionExit2D(Collision2D collision)
     {
-        //Debug.Log("Leaving " + gameManager.getPlayerAttribute(dropZone));
-        //Debug.Log(collision.gameObject);
+        Debug.Log("Leaving " + gameManager.getPlayerAttribute(dropZone));
+        Debug.Log(collision.gameObject);
         if (!collision.gameObject.Equals(dropZone) && gameManager.getPlayerAttribute(collision.gameObject) > -1)
         {
             inDropZone = true;
@@ -53,7 +53,7 @@ public class DragDrop : MonoBehaviour
     {
         startParent = transform.parent.gameObject;
         startPosition = transform.position;
-        if ((startParent.Equals(gameManager.getArea(gameManager.getCurrentPlayer())) && !gameManager.discardStatus()) && gameManager.drawStatus() || (startParent.Equals(gameManager.getArea(GameManager.DISCARD)) && !gameManager.drawStatus() && gameObject.GetComponent<TileProperties>().getPlayer() < 4))
+        if (((startParent.Equals(gameManager.getArea(gameManager.getCurrentPlayer())) && !gameManager.discardStatus()) && gameManager.drawStatus()) || (startParent.Equals(gameManager.getArea(GameManager.DISCARD)) && !gameManager.drawStatus() && gameObject.GetComponent<TileProperties>().getPlayer() < 4))
         {
             isDragging = true;
         }
@@ -63,27 +63,19 @@ public class DragDrop : MonoBehaviour
     {
         isDragging = false;
         //Debug.Log(gameManager.getPlayerAttribute(dropZone));
-        //Debug.Log(inDropZone);
+        Debug.Log(inDropZone);
         if (inDropZone)
         {
+            Debug.Log("Drop Zone is " + gameManager.getPlayerAttribute(dropZone));
             transform.SetParent(dropZone.transform, false);
-            //Debug.Log("ID of Tile is " + gameObject.GetComponent<TileProperties>().getID() + ", Value of Tile is " + gameObject.GetComponent<TileProperties>().getValue());
-            //gameManager.moveTile(gameObject.GetComponent<TileProperties>().getID(), gameObject.GetComponent<TileProperties>().getValue(), startParent, dropZone);
             if (dropZone.Equals(gameManager.getArea(GameManager.DISCARD)) && !gameObject.GetComponent<TileProperties>().getDiscard())
             {
-               //Debug.Log("ID of Tile is " + gameObject.GetComponent<TileProperties>().getID() + ", Value of Tile is " + gameObject.GetComponent<TileProperties>().getValue());
                 gameManager.moveTile(gameObject.GetComponent<TileProperties>().getID(), gameObject.GetComponent<TileProperties>().getValue(), startParent, dropZone);
                 gameManager.logDiscard();
                 gameObject.GetComponent<TileProperties>().setDiscard(true);
-                //the player of the tile isn't updated because when claiming discard it'll check if the id is of the person who just went, so current player - 1.
-                //but you can't pick up any tile of that player at any time, just their last one
-                //so it needs to update eventually
             }
-            else if (!dropZone.Equals(gameManager.getArea(GameManager.DISCARD)) && gameObject.GetComponent<TileProperties>().getDiscard() && gameObject.GetComponent<TileProperties>().getPlayer() != gameManager.getPlayerAttribute(dropZone))
+            else if (!dropZone.Equals(gameManager.getArea(GameManager.DISCARD)) && gameObject.GetComponent<TileProperties>().getDiscard() && gameObject.GetComponent<TileProperties>().getPlayer() != gameManager.getPlayerAttribute(dropZone) && gameManager.checkValidMeld(gameObject, dropZone))
             {
-                gameManager.checkValidMeld(gameObject, dropZone);
-
-                //Debug.Log("ID of Tile is " + gameObject.GetComponent<TileProperties>().getID() + ", Value of Tile is " + gameObject.GetComponent<TileProperties>().getValue());
                 gameManager.moveTile(gameObject.GetComponent<TileProperties>().getID(), gameObject.GetComponent<TileProperties>().getValue(), startParent, dropZone);
                 gameManager.logDraw();
                 int player = gameManager.getPlayerAttribute(dropZone);
@@ -102,7 +94,5 @@ public class DragDrop : MonoBehaviour
             transform.position = startPosition;
             transform.SetParent(startParent.transform, false);
         }
-        //gameManager.testState();
-        //Debug.Log("Tile player is " + gameObject.GetComponent<TileProperties>().getPlayer());
     }
 }

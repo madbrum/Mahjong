@@ -18,6 +18,11 @@ public class DrawCards : MonoBehaviour
     public GameObject NorthArea;
     public GameObject DealArea;
 
+    public GameObject EastName;
+    public GameObject SouthName;
+    public GameObject WestName;
+    public GameObject NorthName;
+
     private List<GameObject> tiles = new List<GameObject>();
     private Sprite[] TileSprites;
 
@@ -75,6 +80,12 @@ public class DrawCards : MonoBehaviour
         gameManager.initArea(WestArea);
         gameManager.initArea(NorthArea);
         gameManager.initArea(DealArea);
+
+        gameManager.initTitle(EastName);
+        EastName.GetComponent<Image>().sprite = Resources.Load<Sprite>("Titles/4east");
+        gameManager.initTitle(SouthName);
+        gameManager.initTitle(WestName);
+        gameManager.initTitle(NorthName);
 
         gameManager.testState();
 

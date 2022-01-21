@@ -180,7 +180,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: d755c98d4b66a7a458e732cd94de61f3, type: 3}
+  m_Sprite: {fileID: 21300000, guid: bd9b9e7d54e45344aaee9a7aa68b5d94, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -321,7 +321,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 45b20b24d51b5fa4083f14e148d82004, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 56cd51a1c3ded3942a8db35403d87ce9, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1925,6 +1925,10 @@ MonoBehaviour:
   WestArea: {fileID: 1339549115}
   NorthArea: {fileID: 1333076801}
   DealArea: {fileID: 1321143238}
+  EastName: {fileID: 1782758649}
+  SouthName: {fileID: 1930118519}
+  WestName: {fileID: 52489427}
+  NorthName: {fileID: 339825482}
 --- !u!1 &1782758649
 GameObject:
   m_ObjectHideFlags: 0
@@ -1982,7 +1986,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: ed7edd74bfde9324b89c54b33ff89ce3, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 4ecfde54d8314ce4692a22a925d99ee3, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -2093,7 +2097,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 133c4e5d44d61bb4dbcdb32a7107c50f, type: 3}
+  m_Sprite: {fileID: 21300000, guid: b4ee7654868c9154ebcefd7ac1501ceb, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
