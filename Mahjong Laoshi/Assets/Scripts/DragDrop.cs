@@ -62,6 +62,10 @@ public class DragDrop : MonoBehaviour
                 gameManager.moveTile(gameObject.GetComponent<TileProperties>().getID(), gameObject.GetComponent<TileProperties>().getValue(), startParent, dropZone);
                 gameManager.logDiscard();
                 gameObject.GetComponent<TileProperties>().setDiscard(true);
+                if (gameObject.GetComponent<TileProperties>().getHidden())
+                {
+                    gameObject.GetComponent<TileProperties>().toggleHide();
+                }
             }
             else if (!dropZone.Equals(gameManager.getArea(GameManager.DISCARD)) && gameObject.GetComponent<TileProperties>().getDiscard() && gameObject.GetComponent<TileProperties>().getPlayer() != gameManager.getPlayerAttribute(dropZone) && gameManager.checkValidMeld(gameObject, dropZone))
             {

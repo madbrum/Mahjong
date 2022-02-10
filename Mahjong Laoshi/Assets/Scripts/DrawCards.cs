@@ -33,6 +33,8 @@ public class DrawCards : MonoBehaviour
     private List<GameObject> westTiles = new List<GameObject>();
     private List<GameObject> northTiles = new List<GameObject>();
 
+    public GameObject toggleButton;
+
     private void Awake()
     {
         gameManager = GameManager.Instance;
@@ -101,6 +103,10 @@ public class DrawCards : MonoBehaviour
         NorthWall.GetComponent<WallProperties>().setID(GameManager.NORTH);
         NorthWall.hideFlags = HideFlags.None;
         NorthWall.SetActive(true);
+
+        toggleButton.hideFlags = HideFlags.None;
+        toggleButton.SetActive(true);
+
         GameObject.Destroy(gameObject);
     }
 

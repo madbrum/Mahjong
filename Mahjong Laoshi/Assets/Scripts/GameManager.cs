@@ -21,6 +21,8 @@ public class GameManager : MonoBehaviour
     private bool drawn = false;
     private bool discarded = false;
 
+    private bool hidden = false;
+
     public static GameManager Instance { get; private set; }
 
     private class TileComparer : IComparer<GameObject>
@@ -83,6 +85,23 @@ public class GameManager : MonoBehaviour
         drawn = true;
     }
 
+    public void toggleHide()
+    {
+        hidden = !hidden;
+        foreach (List<GameObject> hand in hands)
+        {
+            foreach (GameObject tile in hand)
+            {
+                TileProperties props = tile.GetComponent<TileProperties>();
+                if (props.getPlayer() != GameManager.EAST && props.getPlayer() != GameManager.DISCARD)
+                {
+                    props.toggleHide();
+                }
+            }
+        }
+
+    }
+
     public bool drawStatus()
     {
         return drawn;
@@ -91,6 +110,11 @@ public class GameManager : MonoBehaviour
     public bool discardStatus()
     {
         return discarded;
+    }
+
+    public bool getHideStatus()
+    {
+        return hidden;
     }
 
     public void logPlayer(int player)

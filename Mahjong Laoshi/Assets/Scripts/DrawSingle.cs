@@ -39,6 +39,10 @@ public class DrawSingle : MonoBehaviour
         single.SetActive(true);
         single.GetComponent<TileProperties>().setPlayer(currentPlayer);
         single.transform.SetParent(area.transform, false);
+        if (gameManager.getHideStatus())
+        {
+            single.GetComponent<TileProperties>().toggleHide();
+        }
     }
 
 }

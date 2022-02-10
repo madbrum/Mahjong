@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class TileProperties : MonoBehaviour
 {
@@ -9,6 +10,13 @@ public class TileProperties : MonoBehaviour
     private int tileValue;
     private int originPlayer;
     private bool discarded = false;
+    private bool hidden = false;
+    private Sprite previousSprite;
+
+    private void Awake()
+    {
+        previousSprite = Resources.Load<Sprite>("1_blank");
+    }
 
     public void setID(int ID)
     {
@@ -30,6 +38,14 @@ public class TileProperties : MonoBehaviour
         discarded = status;
     }
 
+    public void toggleHide()
+    {
+        hidden = !hidden;
+        Sprite current = gameObject.GetComponent<Image>().sprite;
+        gameObject.GetComponent<Image>().sprite = previousSprite;
+        previousSprite = current;
+    }
+
     public int getID()
     {
         return tileID;
@@ -48,6 +64,11 @@ public class TileProperties : MonoBehaviour
     public bool getDiscard()
     {
         return discarded;
+    }
+
+    public bool getHidden()
+    {
+        return hidden;
     }
 
     private void Update()
