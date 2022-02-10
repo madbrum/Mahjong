@@ -30,22 +30,14 @@ public class DragDrop : MonoBehaviour
     {
         inDropZone = true;
         dropZone = collision.gameObject;
-        Debug.Log("Entering " + gameManager.getPlayerAttribute(dropZone));
     }
 
     private void OnCollisionExit2D(Collision2D collision)
     {
-        Debug.Log("Leaving " + gameManager.getPlayerAttribute(dropZone));
-        Debug.Log(collision.gameObject);
-        if (!collision.gameObject.Equals(dropZone) && gameManager.getPlayerAttribute(collision.gameObject) > -1)
-        {
-            inDropZone = true;
-            dropZone = collision.gameObject;
-        }
-        else
+        if (collision.gameObject.Equals(dropZone))
         {
             inDropZone = false;
-            dropZone = null;
+            dropZone = startParent;
         }
     }
 
@@ -62,11 +54,8 @@ public class DragDrop : MonoBehaviour
     public void endDrag()
     {
         isDragging = false;
-        //Debug.Log(gameManager.getPlayerAttribute(dropZone));
-        Debug.Log(inDropZone);
         if (inDropZone)
         {
-            Debug.Log("Drop Zone is " + gameManager.getPlayerAttribute(dropZone));
             transform.SetParent(dropZone.transform, false);
             if (dropZone.Equals(gameManager.getArea(GameManager.DISCARD)) && !gameObject.GetComponent<TileProperties>().getDiscard())
             {

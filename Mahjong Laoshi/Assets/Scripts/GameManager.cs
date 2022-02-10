@@ -94,8 +94,10 @@ public class GameManager : MonoBehaviour
     }
 
     public void logPlayer(int player)
-    {
+    {    
+        titles[currentPlayer].GetComponent<Image>().sprite = titleImgs[currentPlayer];
         currentPlayer = player;
+        titles[currentPlayer].GetComponent<Image>().sprite = titleImgs[currentPlayer + 4];
     }
 
     public void initHand(List<GameObject> hand, int player)
