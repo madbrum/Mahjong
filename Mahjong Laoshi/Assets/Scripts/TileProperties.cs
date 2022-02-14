@@ -11,6 +11,7 @@ public class TileProperties : MonoBehaviour
     private int originPlayer;
     private bool discarded = false;
     private bool hidden = false;
+    private bool melded = false;
     private Sprite previousSprite;
 
     private void Awake()

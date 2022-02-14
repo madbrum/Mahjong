@@ -107,7 +107,7 @@ public class GameManager : MonoBehaviour
             foreach (GameObject tile in hand)
             {
                 TileProperties props = tile.GetComponent<TileProperties>();
-                if (props.getPlayer() != GameManager.EAST && (props.getPlayer() != GameManager.DISCARD || getPlayerAttribute(tile.transform.parent.gameObject) != GameManager.DISCARD))
+                if (props.getPlayer() != GameManager.EAST && getPlayerAttribute(tile.transform.parent.gameObject) != GameManager.DISCARD)
                 {
                     props.toggleHide();
                 }
@@ -316,6 +316,19 @@ public class GameManager : MonoBehaviour
             titles[currentPlayer].GetComponent<Image>().sprite = titleImgs[currentPlayer + 4];
             drawn = false;
             discarded = false;
+        }
+    }
+
+    private int[,] buildMatrix(List<GameObject> hand)
+    {
+        int[,] handMatrix = new int[4,9];
+        return handMatrix;
+        for (int i = 0; i < handMatrix.Length; i++)
+        {
+            for (int j = 0; j < handMatrix.GetLength(1); j++)
+            {
+
+            }
         }
     }
 

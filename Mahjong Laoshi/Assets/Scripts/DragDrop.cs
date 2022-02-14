@@ -75,6 +75,10 @@ public class DragDrop : MonoBehaviour
                 gameObject.GetComponent<TileProperties>().setPlayer(player);
                 gameObject.GetComponent<TileProperties>().setDiscard(false);
                 gameManager.logPlayer(player);
+                if (gameManager.getHideStatus() && !gameObject.GetComponent<TileProperties>().getHidden())
+                {
+                    gameObject.GetComponent<TileProperties>().toggleHide();
+                }
             }
             else
             {
