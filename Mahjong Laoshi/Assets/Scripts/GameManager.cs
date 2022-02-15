@@ -169,7 +169,7 @@ public class GameManager : MonoBehaviour
 
     //TODO: overload that returns the potential formed melds? we need to know so we can reveal them and change their flags 
     //form two lists for dupes and incs and if there's enough dupes to form a valid meld, return that first. otherwise if the incs are valid, return that. otherwise return empty list 
-    public bool checkValidMeld(GameObject tile, GameObject destination)
+    public bool checkValidMeld(GameObject tile, GameObject destination, bool playerSelect)
     {
         int player = getPlayerAttribute(destination);
         List<GameObject> destHand = new List<GameObject>(hands[player]);
@@ -185,17 +185,22 @@ public class GameManager : MonoBehaviour
         int prevID = destHand[0].GetComponent<TileProperties>().getID();
         for (int i = 0; i < destHand.Count; i++)
         {
+            bool selected = false;
+            if (!playerSelect)
+            {
+                selected = true;
+            }
             int curValue = destHand[i].GetComponent<TileProperties>().getValue();
             int curID = destHand[i].GetComponent<TileProperties>().getID();
             Debug.Log("Duplicate tiles thus far: " + dupeTiles);
             Debug.Log("Current tile ID" + curID + " Current tile value: " + curValue);
             Debug.Log("Increasing tiles: " + incTiles);
             Debug.Log("Previous tile: " + prevValue);
-            if (curID == tileQID && curValue == tileQV)
+            if (selected && curID == tileQID && curValue == tileQV)
             {
                 dupeTiles++;
             }
-            if (curID == tileQID && curID == prevID && !(tileQID >= 3) && curValue >= tileQV - 2 && curValue <= tileQV + 2)
+            if (selected && curID == tileQID && curID == prevID && !(tileQID >= 3) && curValue >= tileQV - 2 && curValue <= tileQV + 2)
             {
                 Debug.Log("Counting");
                 if (prevValue == 0 || curValue == prevValue + 1)
@@ -229,6 +234,14 @@ public class GameManager : MonoBehaviour
         }
         Debug.Log("Illegal Draw");
         return false;
+    }
+
+    public void enableSelection(int player)
+    {
+        foreach (GameObject tile in hands[player])
+        {
+            tile.GetComponent<Button>().enabled = true;
+        }
     }
 
     //public bool checkValidMeld(GameObject tile, GameObject destination)

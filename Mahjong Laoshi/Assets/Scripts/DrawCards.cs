@@ -49,6 +49,7 @@ public class DrawCards : MonoBehaviour
             for (int j = 0; j < 4; j++)
             {
                 GameObject single = Instantiate(Tile, new Vector3(0, 0, 0), Quaternion.identity);
+                single.GetComponent<Button>().enabled = false;
                 single.GetComponent<Image>().sprite = TileSprites[i];
                 single.GetComponent<TileProperties>().setID(i/9);
                 single.GetComponent<TileProperties>().setValue((i % 9) + 1);

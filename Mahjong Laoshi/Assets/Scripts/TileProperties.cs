@@ -12,6 +12,7 @@ public class TileProperties : MonoBehaviour
     private bool discarded = false;
     private bool hidden = false;
     private bool melded = false;
+    private bool selected = false;
     private Sprite previousSprite;
 
     private void Awake()
@@ -47,6 +48,16 @@ public class TileProperties : MonoBehaviour
         previousSprite = current;
     }
 
+    public void select()
+    {
+        selected = true;
+    }
+
+    public void deselect()
+    {
+        selected = false;
+    }
+
     public int getID()
     {
         return tileID;
@@ -70,6 +81,11 @@ public class TileProperties : MonoBehaviour
     public bool getHidden()
     {
         return hidden;
+    }
+
+    public bool getSelect()
+    {
+        return selected;
     }
 
     private void Update()
