@@ -35,13 +35,15 @@ public class DrawCards : MonoBehaviour
 
     public GameObject toggleButton;
 
-    private void Awake()
-    {
-        gameManager = GameManager.Instance;
-    }
+    //private void Awake()
+    //{
+    //    gameManager = GameManager.Instance;
+    //    Debug.Log("GameManager instance set in DrawCards");
+    //}
 
     void Start()
     {
+        gameManager = GameManager.Instance;
         TileSprites = Resources.LoadAll<Sprite>("TileSprites");
         //27 normal + 4 directions + 3 dragons 
         for (int i = 0; i < TileSprites.Length; i++)
@@ -70,6 +72,14 @@ public class DrawCards : MonoBehaviour
             dealSingle(northTiles, NorthArea, GameManager.NORTH);
         }
         dealSingle(eastTiles, EastArea, GameManager.EAST);
+        if (gameManager!= null)
+        {
+            Debug.Log("Yes");
+        }
+        else
+        {
+            Debug.Log("No");
+        }
         gameManager.logDraw();
 
         gameManager.initHand(eastTiles, GameManager.EAST);

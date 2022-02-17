@@ -23,6 +23,9 @@ public class GameManager : MonoBehaviour
 
     private bool hidden = false;
 
+    private int clicks = 0;
+    private int temp = 4;
+
     public static GameManager Instance { get; private set; }
 
     private class TileComparer : IComparer<GameObject>
@@ -64,6 +67,7 @@ public class GameManager : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
+            Debug.Log("GameManager initialized");
         }
         else
         {
@@ -96,6 +100,16 @@ public class GameManager : MonoBehaviour
     public void logDraw()
     {
         drawn = true;
+    }
+
+    public void incrementClick()
+    {
+        clicks++;
+    }
+
+    public int getClicks()
+    {
+        return clicks;
     }
 
     //TODO: fix bug where the discards that were just discarded get flipped 
@@ -138,6 +152,22 @@ public class GameManager : MonoBehaviour
         titles[currentPlayer].GetComponent<Image>().sprite = titleImgs[currentPlayer + 4];
     }
 
+    public void halt()
+    {
+        int temp = currentPlayer;
+        currentPlayer = 4;
+        drawn = false;
+        discarded = false;
+    }
+
+    public void unhalt()
+    {
+        currentPlayer = temp;
+        temp = 4;
+        Debug.Log("Unhalted. Current player: " + currentPlayer);
+        Debug.Log("Temp is now " + temp);
+    }
+
     public void initHand(List<GameObject> hand, int player)
     {
         hands[player] = hand;
@@ -156,7 +186,9 @@ public class GameManager : MonoBehaviour
     public void moveTile(int id, int value, GameObject originP, GameObject destinationP)
     {
         int origin = getPlayerAttribute(originP);
+        Debug.Log("Origin: "  + origin);
         int destination = getPlayerAttribute(destinationP);
+        Debug.Log("Index in origin hand is " + getTileIndex(id, value, origin));
         GameObject tile = hands[origin][getTileIndex(id, value, origin)];
         hands[origin].Remove(tile);
         hands[destination].Add(tile);
@@ -185,7 +217,7 @@ public class GameManager : MonoBehaviour
         int prevID = destHand[0].GetComponent<TileProperties>().getID();
         for (int i = 0; i < destHand.Count; i++)
         {
-            bool selected = false;
+            bool selected = tile.GetComponent<TileProperties>().getSelect();
             if (!playerSelect)
             {
                 selected = true;
@@ -238,6 +270,7 @@ public class GameManager : MonoBehaviour
 
     public void enableSelection(int player)
     {
+        clicks = 0;
         foreach (GameObject tile in hands[player])
         {
             tile.GetComponent<Button>().enabled = true;

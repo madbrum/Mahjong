@@ -6,10 +6,11 @@ using UnityEngine.UI;
 public class ToggleHide : MonoBehaviour
 {
     private string toggledMsg;
-    private GameManager gameManager = GameManager.Instance;
+    private GameManager gameManager;
 
-    void Awake()
+    private void Start()
     {
+        gameManager = GameManager.Instance;
         toggledMsg = "SHOW";
         gameObject.hideFlags = HideFlags.HideInHierarchy;
         gameObject.SetActive(false);

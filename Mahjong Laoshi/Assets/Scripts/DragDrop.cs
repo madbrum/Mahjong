@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class DragDrop : MonoBehaviour
 {
@@ -10,10 +11,15 @@ public class DragDrop : MonoBehaviour
     private GameObject dropZone; 
     private Vector2 startPosition;
     private GameObject startParent;
-    GameManager gameManager = GameManager.Instance;
+    GameManager gameManager;
     private void Awake()
     {
         canvas = GameObject.Find("Main Canvas");
+    }
+
+    private void Start()
+    {
+        gameManager = GameManager.Instance;
     }
 
     // Update is called once per frame
@@ -69,17 +75,21 @@ public class DragDrop : MonoBehaviour
             }
             else if (!dropZone.Equals(gameManager.getArea(GameManager.DISCARD)) && gameObject.GetComponent<TileProperties>().getDiscard() && gameObject.GetComponent<TileProperties>().getPlayer() != gameManager.getPlayerAttribute(dropZone) && gameManager.checkValidMeld(gameObject, dropZone, false))
             {
+                gameObject.GetComponent<Button>().enabled = true;
                 gameManager.enableSelection(gameManager.getPlayerAttribute(dropZone));
-                gameManager.moveTile(gameObject.GetComponent<TileProperties>().getID(), gameObject.GetComponent<TileProperties>().getValue(), startParent, dropZone);
-                gameManager.logDraw();
-                int player = gameManager.getPlayerAttribute(dropZone);
-                gameObject.GetComponent<TileProperties>().setPlayer(player);
-                gameObject.GetComponent<TileProperties>().setDiscard(false);
-                gameManager.logPlayer(player);
-                if (gameManager.getHideStatus() && !gameObject.GetComponent<TileProperties>().getHidden())
-                {
-                    gameObject.GetComponent<TileProperties>().toggleHide();
-                }
+                gameManager.halt();
+                Debug.Log("Halted");
+
+                //gameManager.moveTile(gameObject.GetComponent<TileProperties>().getID(), gameObject.GetComponent<TileProperties>().getValue(), startParent, dropZone);
+                //gameManager.logDraw();
+                //int player = gameManager.getPlayerAttribute(dropZone);
+                //gameObject.GetComponent<TileProperties>().setPlayer(player);
+                //gameObject.GetComponent<TileProperties>().setDiscard(false);
+                //gameManager.logPlayer(player);
+                //if (gameManager.getHideStatus() && !gameObject.GetComponent<TileProperties>().getHidden())
+                //{
+                //    gameObject.GetComponent<TileProperties>().toggleHide();
+                //}
             }
             else
             {
@@ -89,6 +99,32 @@ public class DragDrop : MonoBehaviour
         }
         else
         {
+            transform.position = startPosition;
+            transform.SetParent(startParent.transform, false);
+        }
+    }
+
+    public void officiate(bool valid)
+    {
+        if (valid)
+        {
+            Debug.Log("Success");
+            gameManager.unhalt();
+            Debug.Log("Tile ID is still " + gameObject.GetComponent<TileProperties>().getID());
+            gameManager.moveTile(gameObject.GetComponent<TileProperties>().getID(), gameObject.GetComponent<TileProperties>().getValue(), startParent, dropZone);
+            gameManager.logDraw();
+            int player = gameManager.getPlayerAttribute(dropZone);
+            gameObject.GetComponent<TileProperties>().setPlayer(player);
+            gameObject.GetComponent<TileProperties>().setDiscard(false);
+            gameManager.logPlayer(player);
+            if (gameManager.getHideStatus() && !gameObject.GetComponent<TileProperties>().getHidden())
+            {
+                gameObject.GetComponent<TileProperties>().toggleHide();
+            }
+        }
+        else
+        {
+            Debug.Log("Fail");
             transform.position = startPosition;
             transform.SetParent(startParent.transform, false);
         }
