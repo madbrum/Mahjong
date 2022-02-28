@@ -18,7 +18,7 @@ public class MeldSelect : MonoBehaviour
         Debug.Log("Clicked " + gameManager.getClicks() + " times");
         if (gameManager.getClicks() >= 3)
         {
-            gameObject.GetComponent<DragDrop>().officiate(gameManager.checkValidMeld(gameObject, gameObject.transform.parent.gameObject, true));
+            gameManager.officiate();
         }
     }
 

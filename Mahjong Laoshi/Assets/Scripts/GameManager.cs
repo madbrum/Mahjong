@@ -22,9 +22,11 @@ public class GameManager : MonoBehaviour
     private bool discarded = false;
 
     private bool hidden = false;
+    private bool halted = false;
 
     private int clicks = 0;
     private int temp = 4;
+    private GameObject questionTile;
 
     public static GameManager Instance { get; private set; }
 
@@ -152,20 +154,32 @@ public class GameManager : MonoBehaviour
         titles[currentPlayer].GetComponent<Image>().sprite = titleImgs[currentPlayer + 4];
     }
 
-    public void halt()
+    public void halt(GameObject haltTile)
     {
-        int temp = currentPlayer;
+        Debug.Log("Current player before halt: " + currentPlayer);
+        temp = currentPlayer;
         currentPlayer = 4;
+        Debug.Log("Temp is now " + temp);
+        Debug.Log("Current player is now " + currentPlayer);
+        questionTile = haltTile;
         drawn = false;
         discarded = false;
+        halted = true;
     }
 
     public void unhalt()
     {
+        Debug.Log("Temp value is " + temp);
         currentPlayer = temp;
         temp = 4;
         Debug.Log("Unhalted. Current player: " + currentPlayer);
         Debug.Log("Temp is now " + temp);
+        halted = false;
+    }
+
+    public bool getHalt()
+    {
+        return halted;
     }
 
     public void initHand(List<GameObject> hand, int player)
@@ -197,6 +211,11 @@ public class GameManager : MonoBehaviour
     public int getPlayerAttribute(GameObject area)
     {
         return areas.IndexOf(area);
+    }
+
+    public void officiate()
+    {
+        questionTile.GetComponent<DragDrop>().officiate(checkValidMeld(gameObject, gameObject.transform.parent.gameObject, true));
     }
 
     //TODO: overload that returns the potential formed melds? we need to know so we can reveal them and change their flags 

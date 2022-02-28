@@ -8,9 +8,10 @@ public class DragDrop : MonoBehaviour
     public GameObject canvas;
     private bool isDragging = false;
     private bool inDropZone = false;
-    private GameObject dropZone; 
+    private static GameObject dropZone; 
     private Vector2 startPosition;
-    private GameObject startParent;
+    private static GameObject startParent;
+    private int destPlayerTemp = -1;
     GameManager gameManager;
     private void Awake()
     {
@@ -77,8 +78,10 @@ public class DragDrop : MonoBehaviour
             {
                 gameObject.GetComponent<Button>().enabled = true;
                 gameManager.enableSelection(gameManager.getPlayerAttribute(dropZone));
-                gameManager.halt();
+                gameManager.halt(gameObject);
                 Debug.Log("Halted");
+                destPlayerTemp = gameManager.getPlayerAttribute(dropZone);
+                Debug.Log("Zone: " + gameManager.getPlayerAttribute(dropZone));
 
                 //gameManager.moveTile(gameObject.GetComponent<TileProperties>().getID(), gameObject.GetComponent<TileProperties>().getValue(), startParent, dropZone);
                 //gameManager.logDraw();
@@ -108,25 +111,29 @@ public class DragDrop : MonoBehaviour
     {
         if (valid)
         {
+            Debug.Log(dropZone);
             Debug.Log("Success");
             gameManager.unhalt();
             Debug.Log("Tile ID is still " + gameObject.GetComponent<TileProperties>().getID());
             gameManager.moveTile(gameObject.GetComponent<TileProperties>().getID(), gameObject.GetComponent<TileProperties>().getValue(), startParent, dropZone);
             gameManager.logDraw();
-            int player = gameManager.getPlayerAttribute(dropZone);
-            gameObject.GetComponent<TileProperties>().setPlayer(player);
+            Debug.Log("DropZone id is " + gameManager.getPlayerAttribute(dropZone));
+            Debug.Log("Destination player: " + destPlayerTemp);
+            gameObject.GetComponent<TileProperties>().setPlayer(destPlayerTemp);
             gameObject.GetComponent<TileProperties>().setDiscard(false);
-            gameManager.logPlayer(player);
+            gameManager.logPlayer(destPlayerTemp);
             if (gameManager.getHideStatus() && !gameObject.GetComponent<TileProperties>().getHidden())
             {
                 gameObject.GetComponent<TileProperties>().toggleHide();
             }
+            destPlayerTemp = -1;
         }
         else
         {
             Debug.Log("Fail");
             transform.position = startPosition;
             transform.SetParent(startParent.transform, false);
+            destPlayerTemp = -1;
         }
     }
 }
