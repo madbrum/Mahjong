@@ -8,9 +8,9 @@ public class DragDrop : MonoBehaviour
     public GameObject canvas;
     private bool isDragging = false;
     private bool inDropZone = false;
-    private static GameObject dropZone; 
+    private GameObject dropZone; 
     private Vector2 startPosition;
-    private static GameObject startParent;
+    private GameObject startParent;
     private int destPlayerTemp = -1;
     GameManager gameManager;
     private void Awake()
@@ -111,10 +111,7 @@ public class DragDrop : MonoBehaviour
     {
         if (valid)
         {
-            Debug.Log(dropZone);
-            Debug.Log("Success");
             gameManager.unhalt();
-            Debug.Log("Tile ID is still " + gameObject.GetComponent<TileProperties>().getID());
             gameManager.moveTile(gameObject.GetComponent<TileProperties>().getID(), gameObject.GetComponent<TileProperties>().getValue(), startParent, dropZone);
             gameManager.logDraw();
             Debug.Log("DropZone id is " + gameManager.getPlayerAttribute(dropZone));
@@ -122,11 +119,13 @@ public class DragDrop : MonoBehaviour
             gameObject.GetComponent<TileProperties>().setPlayer(destPlayerTemp);
             gameObject.GetComponent<TileProperties>().setDiscard(false);
             gameManager.logPlayer(destPlayerTemp);
+            gameManager.disableSelection(destPlayerTemp);
             if (gameManager.getHideStatus() && !gameObject.GetComponent<TileProperties>().getHidden())
             {
                 gameObject.GetComponent<TileProperties>().toggleHide();
             }
             destPlayerTemp = -1;
+            Debug.Log("Current status: Drawn is " + gameManager.drawStatus() + " and discard status is " + gameManager.discardStatus());
         }
         else
         {

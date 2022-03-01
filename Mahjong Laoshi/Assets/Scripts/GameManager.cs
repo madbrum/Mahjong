@@ -206,6 +206,7 @@ public class GameManager : MonoBehaviour
         GameObject tile = hands[origin][getTileIndex(id, value, origin)];
         hands[origin].Remove(tile);
         hands[destination].Add(tile);
+        Debug.Log(hands[destination].Count);
     }
 
     public int getPlayerAttribute(GameObject area)
@@ -215,7 +216,8 @@ public class GameManager : MonoBehaviour
 
     public void officiate()
     {
-        questionTile.GetComponent<DragDrop>().officiate(checkValidMeld(gameObject, gameObject.transform.parent.gameObject, true));
+        Debug.Log("ID: " + questionTile.GetComponent<TileProperties>().getID() + "Value: " + questionTile.GetComponent<TileProperties>().getValue());
+        questionTile.GetComponent<DragDrop>().officiate(checkValidMeld(questionTile, questionTile.transform.parent.gameObject, true));
     }
 
     //TODO: overload that returns the potential formed melds? we need to know so we can reveal them and change their flags 
@@ -243,17 +245,12 @@ public class GameManager : MonoBehaviour
             }
             int curValue = destHand[i].GetComponent<TileProperties>().getValue();
             int curID = destHand[i].GetComponent<TileProperties>().getID();
-            Debug.Log("Duplicate tiles thus far: " + dupeTiles);
-            Debug.Log("Current tile ID" + curID + " Current tile value: " + curValue);
-            Debug.Log("Increasing tiles: " + incTiles);
-            Debug.Log("Previous tile: " + prevValue);
             if (selected && curID == tileQID && curValue == tileQV)
             {
                 dupeTiles++;
             }
             if (selected && curID == tileQID && curID == prevID && !(tileQID >= 3) && curValue >= tileQV - 2 && curValue <= tileQV + 2)
             {
-                Debug.Log("Counting");
                 if (prevValue == 0 || curValue == prevValue + 1)
                 {
                     incTiles++;
@@ -266,7 +263,6 @@ public class GameManager : MonoBehaviour
             }
             else
             {
-                Debug.Log("No counting");
             }
 
             prevValue = curValue;
@@ -295,7 +291,18 @@ public class GameManager : MonoBehaviour
             tile.GetComponent<Button>().enabled = true;
         }
     }
-
+    
+    public void disableSelection(int player)
+    {
+        clicks = 0;
+        int test = 0;
+        foreach (GameObject tile in hands[player])
+        {
+            tile.GetComponent<Button>().enabled = false;
+            test++;
+        }
+        Debug.Log(test);
+    }
     //public bool checkValidMeld(GameObject tile, GameObject destination)
     //{
     //    int player = getPlayerAttribute(destination);
