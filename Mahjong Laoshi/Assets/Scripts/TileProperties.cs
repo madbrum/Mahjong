@@ -42,10 +42,22 @@ public class TileProperties : MonoBehaviour
 
     public void toggleHide()
     {
-        hidden = !hidden;
-        Sprite current = gameObject.GetComponent<Image>().sprite;
-        gameObject.GetComponent<Image>().sprite = previousSprite;
-        previousSprite = current;
+        if (!melded)
+        { 
+            hidden = !hidden;
+            Sprite current = gameObject.GetComponent<Image>().sprite;
+            gameObject.GetComponent<Image>().sprite = previousSprite;
+            previousSprite = current;
+        }
+    }
+
+    public void meld()
+    {
+        if (hidden)
+        {
+            toggleHide();
+        }
+        melded = true;
     }
 
     public void select()
@@ -100,4 +112,12 @@ public class TileProperties : MonoBehaviour
             originPlayer = GameManager.DISCARD;
         }
     }
+
+    public void testTileState()
+    {
+        Debug.Log("Discarded : " + discarded);
+        Debug.Log("Hidden: " + hidden);
+        Debug.Log("Melded: " + melded);
+        Debug.Log("Selected: " + selected);
+}
 }

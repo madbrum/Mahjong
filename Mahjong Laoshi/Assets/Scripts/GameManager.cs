@@ -228,7 +228,7 @@ public class GameManager : MonoBehaviour
         List<GameObject> destHand = new List<GameObject>(hands[player]);
         destHand.Add(tile);
         destHand.Sort(new TileComparer());
-        printList(destHand);
+
 
         int tileQV = tile.GetComponent<TileProperties>().getValue();
         int tileQID = tile.GetComponent<TileProperties>().getID();
@@ -247,10 +247,12 @@ public class GameManager : MonoBehaviour
             int curID = destHand[i].GetComponent<TileProperties>().getID();
             if (selected && curID == tileQID && curValue == tileQV)
             {
+                Debug.Log("Selected reading dupe");
                 dupeTiles++;
             }
             if (selected && curID == tileQID && curID == prevID && !(tileQID >= 3) && curValue >= tileQV - 2 && curValue <= tileQV + 2)
             {
+                Debug.Log("Selected reading count");
                 if (prevValue == 0 || curValue == prevValue + 1)
                 {
                     incTiles++;
@@ -292,76 +294,24 @@ public class GameManager : MonoBehaviour
         }
     }
     
-    public void disableSelection(int player)
+    public void disableSelection(int player, bool valid)
     {
         clicks = 0;
-        int test = 0;
         foreach (GameObject tile in hands[player])
         {
             tile.GetComponent<Button>().enabled = false;
-            test++;
+            if (valid)
+            {
+                if (tile.GetComponent<TileProperties>().getSelect())
+                {
+                    tile.GetComponent<TileProperties>().meld();
+                }
+                tile.GetComponent<TileProperties>().deselect();
+            }
         }
-        Debug.Log(test);
+        testState();
+        printList(hands[player]);
     }
-    //public bool checkValidMeld(GameObject tile, GameObject destination)
-    //{
-    //    int player = getPlayerAttribute(destination);
-    //    List<GameObject> destHand = new List<GameObject>(hands[player]);
-    //    List<GameObject> tilesOfSuit = new List<GameObject>();
-    //    for (int i = 0; i < destHand.Count; i++)
-    //    {
-    //        if(destHand[i].GetComponent<TileProperties>().getID() == tile.GetComponent<TileProperties>().getID())
-    //        {
-    //            tilesOfSuit.Add(destHand[i]);
-    //        }
-    //    }
-    //    tilesOfSuit.Add(tile);
-    //    tilesOfSuit.Sort(new TileComparer());
-    //    printList(tilesOfSuit);
-    //    int tileQV = tile.GetComponent<TileProperties>().getValue();
-    //    int dupeTiles = 0;
-    //    int incTiles = 0;
-    //    int prevValue = 0;
-    //    for (int i = 0; i < tilesOfSuit.Count; i++)
-    //    {
-    //        int curValue = tilesOfSuit[i].GetComponent<TileProperties>().getValue();
-    //        Debug.Log("Duplicate tiles thus far: " + dupeTiles);
-    //        Debug.Log("Current tile: " + curValue);
-    //        Debug.Log("Increasing tiles: " + incTiles);
-    //        Debug.Log("Previous tile: " + prevValue);
-    //        if (curValue == tileQV)
-    //        {
-    //            dupeTiles++;
-    //        }
-    //        //how do we make it read for this tile specifically?
-    //        if (curValue >= tileQV - 2 && curValue <= tileQV + 2)
-    //        {
-    //            if (prevValue == 0 || curValue == prevValue + 1)
-    //            {
-    //                incTiles++;
-    //            }
-    //            else
-    //            {
-    //                incTiles = 1;
-    //            }
-    //            // move outside if statement?
-    //            prevValue = curValue;
-    //        }
-
-    //        if (dupeTiles >= 3)
-    //        {
-    //            Debug.Log("Valid Draw");
-    //            return true;
-    //        }
-    //        if (incTiles >= 3 && getPlayerAttribute(destination) == currentPlayer)
-    //        {
-    //            Debug.Log("Valid Draw");
-    //            return true;
-    //        }
-    //    }
-    //    Debug.Log("Illegal Draw");
-    //    return false;
-    //}
 
     private int getTileIndex(int id, int value, int origin)
     {
