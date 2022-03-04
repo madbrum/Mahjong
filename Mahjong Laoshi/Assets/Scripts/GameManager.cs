@@ -315,6 +315,9 @@ public class GameManager : MonoBehaviour
                 {
                     melds++;
                     tile.GetComponent<TileProperties>().meld();
+                    Transform parent = tile.transform.parent;
+                    tile.transform.SetParent(null, false);
+                    tile.transform.SetParent(parent, false);
                 }
                 tile.GetComponent<TileProperties>().deselect();
             }
