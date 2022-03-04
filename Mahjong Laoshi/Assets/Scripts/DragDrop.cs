@@ -102,7 +102,7 @@ public class DragDrop : MonoBehaviour
         {
             //is EVERYTHING here being properly reset? 
             gameManager.unhalt();
-            gameManager.moveTile(gameObject.GetComponent<TileProperties>().getID(), gameObject.GetComponent<TileProperties>().getValue(), startParent, dropZone);
+            gameManager.moveTile(gameObject.GetComponent<TileProperties>().getID(), gameObject.GetComponent<TileProperties>().getValue(), GameManager.DISCARD, destPlayerTemp);
             gameManager.logDraw();
             Debug.Log("DropZone id is " + gameManager.getPlayerAttribute(dropZone));
             Debug.Log("Destination player: " + destPlayerTemp);

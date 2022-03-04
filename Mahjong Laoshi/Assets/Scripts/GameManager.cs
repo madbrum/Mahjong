@@ -200,13 +200,19 @@ public class GameManager : MonoBehaviour
     public void moveTile(int id, int value, GameObject originP, GameObject destinationP)
     {
         int origin = getPlayerAttribute(originP);
-        Debug.Log("Origin: "  + origin);
         int destination = getPlayerAttribute(destinationP);
-        Debug.Log("Index in origin hand is " + getTileIndex(id, value, origin));
         GameObject tile = hands[origin][getTileIndex(id, value, origin)];
         hands[origin].Remove(tile);
         hands[destination].Add(tile);
-        Debug.Log(hands[destination].Count);
+        Debug.Log("Moved tile from " + origin + " to " + destination + ". Id and Value are " + id + " " + value);
+    }
+
+    public void moveTile(int id, int value, int originID, int destinationID)
+    {
+        GameObject tile = hands[originID][getTileIndex(id, value, originID)];
+        hands[originID].Remove(tile);
+        hands[destinationID].Add(tile);
+        Debug.Log("Moved tile from " + originID + " to " + destinationID + ". Id and Value are " + id + " " + value);
     }
 
     public int getPlayerAttribute(GameObject area)
@@ -297,18 +303,23 @@ public class GameManager : MonoBehaviour
     public void disableSelection(int player, bool valid)
     {
         clicks = 0;
+        int test = 0;
+        int melds = 0;
         foreach (GameObject tile in hands[player])
         {
             tile.GetComponent<Button>().enabled = false;
             if (valid)
             {
+                test++;
                 if (tile.GetComponent<TileProperties>().getSelect())
                 {
+                    melds++;
                     tile.GetComponent<TileProperties>().meld();
                 }
                 tile.GetComponent<TileProperties>().deselect();
             }
         }
+        Debug.Log(test + " " + melds);
         testState();
         printList(hands[player]);
     }
