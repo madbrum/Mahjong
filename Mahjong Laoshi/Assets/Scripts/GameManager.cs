@@ -123,7 +123,7 @@ public class GameManager : MonoBehaviour
             foreach (GameObject tile in hand)
             {
                 TileProperties props = tile.GetComponent<TileProperties>();
-                if ((props.getPlayer() != GameManager.EAST && getPlayerAttribute(props.transform.parent.gameObject) != GameManager.EAST) && getPlayerAttribute(tile.transform.parent.gameObject) != GameManager.DISCARD)
+                if ((props.getPlayer() != GameManager.EAST && getPlayerAttribute(props.transform.parent.gameObject) != GameManager.EAST) && getPlayerAttribute(tile.transform.parent.gameObject) != GameManager.DISCARD && (halted && tile.Equals(questionTile)))
                 {
                     props.toggleHide();
                 }
