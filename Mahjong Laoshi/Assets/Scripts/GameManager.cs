@@ -123,9 +123,12 @@ public class GameManager : MonoBehaviour
             foreach (GameObject tile in hand)
             {
                 TileProperties props = tile.GetComponent<TileProperties>();
-                if ((props.getPlayer() != GameManager.EAST && getPlayerAttribute(props.transform.parent.gameObject) != GameManager.EAST) && getPlayerAttribute(tile.transform.parent.gameObject) != GameManager.DISCARD && (halted && tile.Equals(questionTile)))
+                if ((props.getPlayer() != GameManager.EAST && getPlayerAttribute(props.transform.parent.gameObject) != GameManager.EAST) && getPlayerAttribute(tile.transform.parent.gameObject) != GameManager.DISCARD)
                 {
-                    props.toggleHide();
+                    if (!halted || (halted && !tile.Equals(questionTile)))
+                    {
+                        props.toggleHide();
+                    }
                 }
             }
         }
@@ -319,8 +322,8 @@ public class GameManager : MonoBehaviour
                     tile.transform.SetParent(null, false);
                     tile.transform.SetParent(parent, false);
                 }
-                tile.GetComponent<TileProperties>().deselect();
             }
+            tile.GetComponent<TileProperties>().deselect();
         }
         Debug.Log(test + " " + melds);
         testState();

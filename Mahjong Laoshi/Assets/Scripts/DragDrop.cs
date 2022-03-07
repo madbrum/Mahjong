@@ -61,6 +61,7 @@ public class DragDrop : MonoBehaviour
     public void endDrag()
     {
         isDragging = false;
+        gameObject.GetComponent<TileProperties>().testTileState();
         if (inDropZone)
         {
             transform.SetParent(dropZone.transform, false);
