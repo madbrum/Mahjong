@@ -99,31 +99,38 @@ public class DragDrop : MonoBehaviour
 
     public void officiate(bool valid)
     {
+        Debug.Log("\t\tBEGIN: " + this.name + " officiate(bool valid)" + " parameter valid = " + valid);
+        Debug.Log("\t\tEssential values:");
+        Debug.Log("\t\t\tdestPlayerTemp = " + destPlayerTemp + ", DropZone id is " + gameManager.getPlayerAttribute(dropZone) + ". Should be equal, though DropZone is not used.");
+        Debug.Log("This is the discarded tile. Should match with the tile printed in GameManager on officiate. " + gameManager.analyzeTile(gameObject));
+        gameManager.testHand(destPlayerTemp);
+        gameManager.testHand(GameManager.DISCARD);
         if (valid)
         {
             //is EVERYTHING here being properly reset? 
             gameManager.unhalt();
             gameManager.moveTile(gameObject.GetComponent<TileProperties>().getID(), gameObject.GetComponent<TileProperties>().getValue(), GameManager.DISCARD, destPlayerTemp);
             gameManager.logDraw();
-            Debug.Log("DropZone id is " + gameManager.getPlayerAttribute(dropZone));
-            Debug.Log("Destination player: " + destPlayerTemp);
             gameObject.GetComponent<TileProperties>().setPlayer(destPlayerTemp);
             gameObject.GetComponent<TileProperties>().setDiscard(false);
             gameManager.logPlayer(destPlayerTemp);
-            Debug.Log("Current status: Drawn is " + gameManager.drawStatus() + " and discard status is " + gameManager.discardStatus());
-            gameObject.GetComponent<TileProperties>().testTileState();
+            Debug.Log("\t\t\tCurrent status: Drawn is " + gameManager.drawStatus() + " and discard status is " + gameManager.discardStatus());
+            Debug.Log("Meld is valid and changes have been made. Compare current state of question tile to previous: " + gameManager.analyzeTile(gameObject));
         }
         else
         {
-            Debug.Log("Fail");
             gameManager.unhalt();
             transform.position = startPosition;
             transform.SetParent(startParent.transform, false);
-            Debug.Log("Player is " + gameManager.getCurrentPlayer() + "Current status: Drawn is " + gameManager.drawStatus() + " and discard status is " + gameManager.discardStatus());
+            Debug.Log("Meld has been declared invalid. Player is " + gameManager.getCurrentPlayer() + "Current status: Drawn is " + gameManager.drawStatus() + " and discard status is " + gameManager.discardStatus() + ". Compare current state of question tile to previous: " + gameManager.analyzeTile(gameObject));
         }
         gameObject.GetComponent<Button>().enabled = false;
+        //bug is probably that discarded tiles aren't being disabled either 
         gameManager.disableSelection(destPlayerTemp, valid);
-        gameObject.GetComponent<TileProperties>().testTileState();
+        gameManager.testHand(destPlayerTemp);
+        gameManager.testHand(GameManager.DISCARD);
+        Debug.Log("officiate has completed. Compare current state of question tile to previous: " + gameManager.analyzeTile(gameObject));
         destPlayerTemp = -1;
+        Debug.Log("\t\tEND: " + this.name + " officiate(bool valid)" + " parameter valid = " + valid);
     }
 }

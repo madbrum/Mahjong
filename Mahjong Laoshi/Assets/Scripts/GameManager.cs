@@ -172,12 +172,14 @@ public class GameManager : MonoBehaviour
 
     public void unhalt()
     {
-        Debug.Log("Temp value is " + temp);
+        Debug.Log("\t\t\tBEGIN: " + this.name + " unhalt()");
+        Debug.Log("\t\t\t\tTemp value is " + temp);
         currentPlayer = temp;
         temp = 4;
-        Debug.Log("Unhalted. Current player: " + currentPlayer);
-        Debug.Log("Temp is now " + temp);
+        Debug.Log("\t\t\t\tUnhalted. Current player: " + currentPlayer);
+        Debug.Log("\t\t\t\tTemp is now " + temp);
         halted = false;
+        Debug.Log("\t\t\tEND: " + this.name + " unhalt()");
     }
 
     public bool getHalt()
@@ -212,9 +214,14 @@ public class GameManager : MonoBehaviour
 
     public void moveTile(int id, int value, int originID, int destinationID)
     {
+        Debug.Log("\t\t\tBEGIN: " + this.name + " moveTile(int id, int value, int originID, int destinationID) with parameters: ID = " + id + " Value = " + value + " OriginID = " + originID + " DestinationID = " + destinationID);
+        testHand(originID);
+        testHand(destinationID);
         GameObject tile = hands[originID][getTileIndex(id, value, originID)];
         hands[originID].Remove(tile);
         hands[destinationID].Add(tile);
+        testHand(originID);
+        testHand(destinationID);
         Debug.Log("Moved tile from " + originID + " to " + destinationID + ". Id and Value are " + id + " " + value);
     }
 
@@ -225,8 +232,10 @@ public class GameManager : MonoBehaviour
 
     public void officiate()
     {
-        Debug.Log("ID: " + questionTile.GetComponent<TileProperties>().getID() + "Value: " + questionTile.GetComponent<TileProperties>().getValue());
+        Debug.Log("\tBEGIN: " + this.name + " officiate()");
+        Debug.Log("\tTile in question: " + analyzeTile(questionTile));
         questionTile.GetComponent<DragDrop>().officiate(checkValidMeld(questionTile, questionTile.transform.parent.gameObject, true));
+        Debug.Log("\tEND: " + this.name + " officiate()");
     }
 
     //TODO: overload that returns the potential formed melds? we need to know so we can reveal them and change their flags 
@@ -305,6 +314,8 @@ public class GameManager : MonoBehaviour
     
     public void disableSelection(int player, bool valid)
     {
+        Debug.Log("\t\t\tBEGIN: " + this.name + " disableSelection(int player, bool valid)" + " parameters: player = " + player + ", valid = " + valid);
+        testHand(player);
         clicks = 0;
         int test = 0;
         int melds = 0;
@@ -316,18 +327,22 @@ public class GameManager : MonoBehaviour
                 test++;
                 if (tile.GetComponent<TileProperties>().getSelect())
                 {
+                    Debug.Log("Tile is being melded. Tile properties: " + analyzeTile(tile));
                     melds++;
                     tile.GetComponent<TileProperties>().meld();
                     Transform parent = tile.transform.parent;
                     tile.transform.SetParent(null, false);
                     tile.transform.SetParent(parent, false);
+                    Debug.Log("Tile after melding: " + analyzeTile(tile));
                 }
             }
             tile.GetComponent<TileProperties>().deselect();
+            Debug.Log("Tile after running through disableSelection. Selected must be false now. " + analyzeTile(tile));
         }
-        Debug.Log(test + " " + melds);
+        Debug.Log("Number of valid counts : " + test + ", number of tiles that were melded: " + melds);
         testState();
         printList(hands[player]);
+        Debug.Log("\t\t\tEND: " + this.name + " disableSelection(int player, bool valid)" + " parameters: player = " + player + ", valid = " + valid);
     }
 
     private int getTileIndex(int id, int value, int origin)
@@ -382,11 +397,24 @@ public class GameManager : MonoBehaviour
         Debug.Log("Current player is " + currentPlayer);
     }
 
+    public void testHand(int player)
+    {
+        Debug.Log("Hand " + player + " with Size " + hands[player].Count);
+        printList(hands[player]);
+    }
+
     public void printList(List<GameObject> tiles)
     {
         for (int i = 0; i < tiles.Count; i++)
         {
-            Debug.Log("Value: " + tiles[i].GetComponent<TileProperties>().getValue() + "ID: " + tiles[i].GetComponent<TileProperties>().getID());
+            Debug.Log("\tTile " + i + ": ");
+            Debug.Log("\t" + analyzeTile(tiles[i]));
         }
+    }
+
+    public string analyzeTile(GameObject tile)
+    {
+        TileProperties props = tile.GetComponent<TileProperties>();
+        return "ID: " + props.getID() + ", Value: " + props.getValue() + ", Player ID: " + props.getPlayer() + ", Discarded? " + props.getDiscard() + ", Hidden? " + props.getHidden() + ", Selected? " + props.getSelect() + ", Melded? " + props.getMeld();
     }
 }

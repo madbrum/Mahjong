@@ -62,7 +62,9 @@ public class TileProperties : MonoBehaviour
 
     public void select()
     {
+        Debug.Log("\tBEGIN: " + this.name + " select()");
         selected = true;
+        Debug.Log("\tEND: " + this.name + " selected()");
     }
 
     public void deselect()
@@ -98,6 +100,11 @@ public class TileProperties : MonoBehaviour
     public bool getSelect()
     {
         return selected;
+    }
+
+    public bool getMeld()
+    {
+        return melded;
     }
 
     private void Update()
