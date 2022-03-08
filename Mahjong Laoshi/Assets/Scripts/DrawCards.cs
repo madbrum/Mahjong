@@ -72,14 +72,6 @@ public class DrawCards : MonoBehaviour
             dealSingle(northTiles, NorthArea, GameManager.NORTH);
         }
         dealSingle(eastTiles, EastArea, GameManager.EAST);
-        if (gameManager!= null)
-        {
-            Debug.Log("Yes");
-        }
-        else
-        {
-            Debug.Log("No");
-        }
         gameManager.logDraw();
 
         gameManager.initHand(eastTiles, GameManager.EAST);
@@ -99,8 +91,6 @@ public class DrawCards : MonoBehaviour
         gameManager.initTitle(SouthName);
         gameManager.initTitle(WestName);
         gameManager.initTitle(NorthName);
-
-        gameManager.testState();
 
         EastWall.GetComponent<WallProperties>().setID(GameManager.EAST);
         EastWall.hideFlags = HideFlags.None;
