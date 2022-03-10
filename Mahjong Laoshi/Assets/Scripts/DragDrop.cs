@@ -122,9 +122,9 @@ public class DragDrop : MonoBehaviour
             gameManager.unhalt();
             transform.position = startPosition;
             transform.SetParent(startParent.transform, false);
+            gameManager.disableSelection(GameManager.DISCARD, valid);
             Debug.Log("Meld has been declared invalid. Player is " + gameManager.getCurrentPlayer() + "Current status: Drawn is " + gameManager.drawStatus() + " and discard status is " + gameManager.discardStatus() + ". Compare current state of question tile to previous: " + gameManager.analyzeTile(gameObject));
         }
-        gameObject.GetComponent<Button>().enabled = false;
         //bug is probably that discarded tiles aren't being disabled either 
         gameManager.disableSelection(destPlayerTemp, valid);
         gameManager.testHand(destPlayerTemp);

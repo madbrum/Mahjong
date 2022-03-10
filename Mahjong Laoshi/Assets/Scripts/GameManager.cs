@@ -217,8 +217,9 @@ public class GameManager : MonoBehaviour
         Debug.Log("\t\t\tBEGIN: " + this.name + " moveTile(int id, int value, int originID, int destinationID) with parameters: ID = " + id + " Value = " + value + " OriginID = " + originID + " DestinationID = " + destinationID);
         testHand(originID);
         testHand(destinationID);
-        GameObject tile = hands[originID][getTileIndex(id, value, originID)];
-        hands[originID].Remove(tile);
+        int tileIndex = getTileIndex(id, value, originID);
+        GameObject tile = hands[originID][tileIndex];
+        hands[originID].RemoveAt(tileIndex);
         hands[destinationID].Add(tile);
         testHand(originID);
         testHand(destinationID);
@@ -347,15 +348,22 @@ public class GameManager : MonoBehaviour
 
     private int getTileIndex(int id, int value, int origin)
     {
-        //if -1 returns that means the tile isn't present in this hand . probably need to add checks for this later
         int tileIndex = -1;
-        for (int i = 0; i < hands[origin].Count; i++)
+        for (int i = hands[origin].Count - 1; i >= 0; i--)
         {
             TileProperties props = hands[origin][i].GetComponent<TileProperties>();
             if (props.getID() == id && props.getValue() == value)
             {
-                tileIndex = i;
-                break;
+                if (origin != GameManager.DISCARD)
+                {
+                    tileIndex = i;
+                    break;
+                }
+                else if (props.getSelect())
+                {
+                    tileIndex = i;
+                    break;
+                }
             }
         }
         return tileIndex;
