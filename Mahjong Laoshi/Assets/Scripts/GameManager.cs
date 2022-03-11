@@ -247,7 +247,7 @@ public class GameManager : MonoBehaviour
         List<GameObject> destHand = new List<GameObject>(hands[player]);
         destHand.Add(tile);
         destHand.Sort(new TileComparer());
-
+        printList(destHand);
 
         int tileQV = tile.GetComponent<TileProperties>().getValue();
         int tileQID = tile.GetComponent<TileProperties>().getID();
@@ -269,12 +269,16 @@ public class GameManager : MonoBehaviour
                 Debug.Log("Selected reading dupe");
                 dupeTiles++;
             }
-            if (selected && curID == tileQID && curID == prevID && !(tileQID >= 3) && curValue >= tileQV - 2 && curValue <= tileQV + 2)
+            Debug.Log("Test is as follows: ");
+            Debug.Log(selected + " " + (curID == tileQID) + " " + (curID == prevID) + " " + (!(tileQID >= 3)) + " " + (curValue >= tileQV - 2) + " " + (curValue <= tileQV + 2));
+            Debug.Log("curID = " + curID + ", tileQID = " + tileQID + ", prevID = " + prevID + ", curValue = " + curValue + ", tileQV = " + tileQV + " incTiles = " + incTiles);
+            if (selected && curID == tileQID && curID == prevID && !(tileQID >= 3) && ((curValue >= tileQV - 2 && curValue <= tileQV + 2) || (prevValue == 0)))
             {
                 Debug.Log("Selected reading count");
                 if (prevValue == 0 || curValue == prevValue + 1)
                 {
                     incTiles++;
+                    Debug.Log("IncTiles increased. Now " + incTiles);
                 }
                 else
                 {
@@ -284,6 +288,7 @@ public class GameManager : MonoBehaviour
             }
             else
             {
+                incTiles = 1;
             }
 
             prevValue = curValue;
