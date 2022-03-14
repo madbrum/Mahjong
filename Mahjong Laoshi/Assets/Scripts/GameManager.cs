@@ -270,28 +270,29 @@ public class GameManager : MonoBehaviour
                 dupeTiles++;
             }
             Debug.Log("Test is as follows: ");
-            Debug.Log(selected + " " + (curID == tileQID) + " " + (curID == prevID) + " " + (!(tileQID >= 3)) + " " + (curValue >= tileQV - 2) + " " + (curValue <= tileQV + 2));
-            Debug.Log("curID = " + curID + ", tileQID = " + tileQID + ", prevID = " + prevID + ", curValue = " + curValue + ", tileQV = " + tileQV + " incTiles = " + incTiles);
-            if (selected && curID == tileQID && curID == prevID && !(tileQID >= 3) && ((curValue >= tileQV - 2 && curValue <= tileQV + 2) || (prevValue == 0)))
+            Debug.Log("selected && tileQID < 3 && curID == tileQID && curValue >= tileQV - 2 && curValue <= tileQV + 2");
+            Debug.Log(selected + " " + (tileQID < 3) + " " + (curID == tileQID) + " " + (curValue >= tileQV - 2) + " " + (curValue <= tileQV + 2));
+            Debug.Log("curID = " + curID + ", tileQID = " + tileQID + ", prevID = " + prevID + ", curValue = " + curValue + ", tileQV = " + tileQV + " incTiles = " + incTiles + " prevValue = " + prevValue);
+            if (selected && tileQID < 3 && curID == tileQID && curValue >= tileQV - 2 && curValue <= tileQV + 2)
             {
                 Debug.Log("Selected reading count");
                 if (prevValue == 0 || curValue == prevValue + 1)
                 {
                     incTiles++;
+                    prevValue = curValue;
                     Debug.Log("IncTiles increased. Now " + incTiles);
                 }
                 else
                 {
+                    prevValue = curValue;
                     incTiles = 1;
                 }
-                // move outside if statement?
             }
             else
             {
-                incTiles = 1;
+                incTiles = 0;
+                prevValue = 0;
             }
-
-            prevValue = curValue;
             prevID = curID;
 
             if (dupeTiles >= 3)
@@ -299,10 +300,23 @@ public class GameManager : MonoBehaviour
                 Debug.Log("Valid Draw");
                 return true;
             }
-            if (incTiles >= 3 && getPlayerAttribute(destination) == currentPlayer)
+            Debug.Log("Test: incTiles >= 3 && getPlayerAttribute(destination) == temp");
+            Debug.Log((incTiles >= 3) + " " + getPlayerAttribute(destination) + " == " + temp + " " + (getPlayerAttribute(destination) == temp));
+            if (playerSelect)
             {
-                Debug.Log("Valid Draw");
-                return true;
+                if (incTiles >= 3 && getPlayerAttribute(destination) == temp)
+                {
+                    Debug.Log("Valid Draw");
+                    return true;
+                }
+            }
+            else
+            {
+                if (incTiles >= 3 && getPlayerAttribute(destination) == currentPlayer)
+                {
+                    Debug.Log("Valid Draw");
+                    return true;
+                }
             }
         }
         Debug.Log("Illegal Draw");
