@@ -228,13 +228,13 @@ public class GameManager : MonoBehaviour
         Debug.Log("\tTile in question: " + analyzeTile(questionTile));
         testHand(GameManager.DISCARD);
         Debug.Log(questionTile.transform.parent.name);
-        questionTile.GetComponent<DragDrop>().officiate(checkValidMeld(questionTile, questionTile.transform.parent.gameObject, true));
+        questionTile.GetComponent<DragDrop>().officiate(checkValidMeld(questionTile, questionTile.transform.parent.gameObject));
         Debug.Log("\tEND: " + this.name + " officiate()");
     }
 
     //TODO: overload that returns the potential formed melds? we need to know so we can reveal them and change their flags 
     //form two lists for dupes and incs and if there's enough dupes to form a valid meld, return that first. otherwise if the incs are valid, return that. otherwise return empty list 
-    public bool checkValidMeld(GameObject tile, GameObject destination, bool playerSelect)
+    public bool checkValidMeld(GameObject tile, GameObject destination)
     {
         int player = getPlayerAttribute(destination);
         List<GameObject> destHand = new List<GameObject>(hands[player]);
@@ -249,15 +249,16 @@ public class GameManager : MonoBehaviour
         int incTiles = 0;
         int prevValue = 0;
         int prevID = destHand[0].GetComponent<TileProperties>().getID();
+        bool qSelected = false;
         for (int i = 0; i < destHand.Count; i++)
         {
             bool selected = destHand[i].GetComponent<TileProperties>().getSelect();
-            if (!playerSelect)
-            {
-                selected = true;
-            }
             int curValue = destHand[i].GetComponent<TileProperties>().getValue();
             int curID = destHand[i].GetComponent<TileProperties>().getID();
+            if (selected && destHand[i].Equals(questionTile))
+            {
+                qSelected = true;
+            }
             if (selected && curID == tileQID && curValue == tileQV)
             {
                 Debug.Log("Selected reading dupe");
@@ -289,28 +290,17 @@ public class GameManager : MonoBehaviour
             //}
             prevID = curID;
 
-            if (dupeTiles >= 3)
+            if (dupeTiles >= 3 && qSelected)
             {
                 Debug.Log("Valid Draw");
                 return true;
             }
             Debug.Log("Test: incTiles >= 3 && getPlayerAttribute(destination) == temp");
             Debug.Log((incTiles >= 3) + " " + getPlayerAttribute(destination) + " == " + temp + " " + (getPlayerAttribute(destination) == temp));
-            if (playerSelect)
+            if (incTiles >= 3 && getPlayerAttribute(destination) == temp && qSelected)
             {
-                if (incTiles >= 3 && getPlayerAttribute(destination) == temp)
-                {
-                    Debug.Log("Valid Draw");
-                    return true;
-                }
-            }
-            else
-            {
-                if (incTiles >= 3 && getPlayerAttribute(destination) == currentPlayer)
-                {
-                    Debug.Log("Valid Draw");
-                    return true;
-                }
+                Debug.Log("Valid Draw");
+                return true;
             }
         }
         Debug.Log("Illegal Draw");
