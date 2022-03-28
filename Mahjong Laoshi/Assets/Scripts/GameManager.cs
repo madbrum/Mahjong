@@ -202,28 +202,19 @@ public class GameManager : MonoBehaviour
         titles.Add(title);
     }
 
-    public void moveTile(int id, int value, GameObject originP, GameObject destinationP)
+    public void moveTile(GameObject tileP, int originID, int destinationID)
     {
-        int origin = getPlayerAttribute(originP);
-        int destination = getPlayerAttribute(destinationP);
-        GameObject tile = hands[origin][getTileIndex(id, value, origin)];
-        hands[origin].Remove(tile);
-        hands[destination].Add(tile);
-        Debug.Log("Moved tile from " + origin + " to " + destination + ". Id and Value are " + id + " " + value);
-    }
-
-    public void moveTile(int id, int value, int originID, int destinationID)
-    {
-        Debug.Log("\t\t\tBEGIN: " + this.name + " moveTile(int id, int value, int originID, int destinationID) with parameters: ID = " + id + " Value = " + value + " OriginID = " + originID + " DestinationID = " + destinationID);
+        Debug.Log("\t\t\tBEGIN: " + this.name + " moveTile(int id, int value, int originID, int destinationID) with parameters: tileP = " + tileP.name + " OriginID = " + originID + " DestinationID = " + destinationID);
         testHand(originID);
         testHand(destinationID);
-        int tileIndex = getTileIndex(id, value, originID);
+        int tileIndex = getTileIndex(tileP, originID);
+        Debug.Log("Tile Index is " + tileIndex);
         GameObject tile = hands[originID][tileIndex];
         hands[originID].RemoveAt(tileIndex);
         hands[destinationID].Add(tile);
         testHand(originID);
         testHand(destinationID);
-        Debug.Log("Moved tile from " + originID + " to " + destinationID + ". Id and Value are " + id + " " + value);
+        Debug.Log("Moved tile from " + originID + " to " + destinationID + ". Id and Value are " + tileP.name);
     }
 
     public int getPlayerAttribute(GameObject area)
@@ -235,6 +226,8 @@ public class GameManager : MonoBehaviour
     {
         Debug.Log("\tBEGIN: " + this.name + " officiate()");
         Debug.Log("\tTile in question: " + analyzeTile(questionTile));
+        testHand(GameManager.DISCARD);
+        Debug.Log(questionTile.transform.parent.name);
         questionTile.GetComponent<DragDrop>().officiate(checkValidMeld(questionTile, questionTile.transform.parent.gameObject, true));
         Debug.Log("\tEND: " + this.name + " officiate()");
     }
@@ -248,6 +241,7 @@ public class GameManager : MonoBehaviour
         destHand.Add(tile);
         destHand.Sort(new TileComparer());
         printList(destHand);
+        printList(hands[GameManager.DISCARD]);
 
         int tileQV = tile.GetComponent<TileProperties>().getValue();
         int tileQID = tile.GetComponent<TileProperties>().getID();
@@ -257,7 +251,7 @@ public class GameManager : MonoBehaviour
         int prevID = destHand[0].GetComponent<TileProperties>().getID();
         for (int i = 0; i < destHand.Count; i++)
         {
-            bool selected = tile.GetComponent<TileProperties>().getSelect();
+            bool selected = destHand[i].GetComponent<TileProperties>().getSelect();
             if (!playerSelect)
             {
                 selected = true;
@@ -276,23 +270,23 @@ public class GameManager : MonoBehaviour
             if (selected && tileQID < 3 && curID == tileQID && curValue >= tileQV - 2 && curValue <= tileQV + 2)
             {
                 Debug.Log("Selected reading count");
-                if (prevValue == 0 || curValue == prevValue + 1)
+                if ((prevValue == 0 || curValue == prevValue + 1) && prevValue != curValue)
                 {
                     incTiles++;
                     prevValue = curValue;
                     Debug.Log("IncTiles increased. Now " + incTiles);
                 }
-                else
+                else if (prevValue != curValue)
                 {
                     prevValue = curValue;
                     incTiles = 1;
                 }
             }
-            else
-            {
-                incTiles = 0;
-                prevValue = 0;
-            }
+            //else
+            //{
+            //    incTiles = 0;
+            //    prevValue = 0;
+            //}
             prevID = curID;
 
             if (dupeTiles >= 3)
@@ -365,6 +359,21 @@ public class GameManager : MonoBehaviour
         Debug.Log("\t\t\tEND: " + this.name + " disableSelection(int player, bool valid)" + " parameters: player = " + player + ", valid = " + valid);
     }
 
+    private int getTileIndex(GameObject tile, int origin)
+    {
+        int tileIndex = -1;
+        for (int i = 0; i < hands[origin].Count; i++)
+        {
+            TileProperties props = hands[origin][i].GetComponent<TileProperties>();
+            if (props.getKey() == tile.GetComponent<TileProperties>().getKey())
+            {
+                tileIndex = i;
+                break;
+            }
+        }
+        return tileIndex;
+    }
+
     private int getTileIndex(int id, int value, int origin)
     {
         int tileIndex = -1;
@@ -400,18 +409,18 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private int[,] buildMatrix(List<GameObject> hand)
-    {
-        int[,] handMatrix = new int[4,9];
-        return handMatrix;
-        for (int i = 0; i < handMatrix.Length; i++)
-        {
-            for (int j = 0; j < handMatrix.GetLength(1); j++)
-            {
+    //private int[,] buildMatrix(List<GameObject> hand)
+    //{
+    //    int[,] handMatrix = new int[4,9];
+    //    return handMatrix;
+    //    for (int i = 0; i < handMatrix.Length; i++)
+    //    {
+    //        for (int j = 0; j < handMatrix.GetLength(1); j++)
+    //        {
 
-            }
-        }
-    }
+    //        }
+    //    }
+    //}
 
     public void testState()
     {

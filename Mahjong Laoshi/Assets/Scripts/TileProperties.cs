@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class TileProperties : MonoBehaviour
 {
     private GameManager gameManager = GameManager.Instance;
+    private int tileKey;
     private int tileID;
     private int tileValue;
     private int originPlayer;
@@ -28,6 +29,11 @@ public class TileProperties : MonoBehaviour
     public void setValue(int value)
     {
         tileValue = value;
+    }
+
+    public void setKey(int key)
+    {
+        tileKey = key;
     }
     
     public void setPlayer(int player)
@@ -80,6 +86,11 @@ public class TileProperties : MonoBehaviour
     public int getValue()
     {
         return tileValue;
+    }
+
+    public int getKey()
+    {
+        return tileKey;
     }
 
     public int getPlayer()

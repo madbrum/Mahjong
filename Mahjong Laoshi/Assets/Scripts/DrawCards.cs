@@ -46,6 +46,7 @@ public class DrawCards : MonoBehaviour
         gameManager = GameManager.Instance;
         TileSprites = Resources.LoadAll<Sprite>("TileSprites");
         //27 normal + 4 directions + 3 dragons 
+        int keyCount = 0;
         for (int i = 0; i < TileSprites.Length; i++)
         {
             for (int j = 0; j < 4; j++)
@@ -55,9 +56,12 @@ public class DrawCards : MonoBehaviour
                 single.GetComponent<Image>().sprite = TileSprites[i];
                 single.GetComponent<TileProperties>().setID(i/9);
                 single.GetComponent<TileProperties>().setValue((i % 9) + 1);
+                single.GetComponent<TileProperties>().setKey(keyCount);
+                single.name = "Tile ID: " + single.GetComponent<TileProperties>().getID() + ", Tile Value: " + single.GetComponent<TileProperties>().getValue();
                 single.hideFlags = HideFlags.HideInHierarchy;
                 single.SetActive(false);
                 tiles.Add(single);
+                keyCount++;
             }
         }
     }

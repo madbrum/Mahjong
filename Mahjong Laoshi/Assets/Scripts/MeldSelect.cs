@@ -15,6 +15,8 @@ public class MeldSelect : MonoBehaviour
     {
         Debug.Log("BEGIN: " + this.name + " OnClick()");
         gameObject.GetComponent<TileProperties>().select();
+        gameManager.testHand(GameManager.DISCARD);
+        Debug.Log(gameObject.transform.parent.name);
         gameManager.incrementClick();
         if (gameManager.getClicks() >= 3)
         {

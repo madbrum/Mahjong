@@ -67,9 +67,9 @@ public class DragDrop : MonoBehaviour
             transform.SetParent(dropZone.transform, false);
             if (dropZone.Equals(gameManager.getArea(GameManager.DISCARD)) && !gameObject.GetComponent<TileProperties>().getDiscard())
             {
-                gameManager.moveTile(gameObject.GetComponent<TileProperties>().getID(), gameObject.GetComponent<TileProperties>().getValue(), startParent, dropZone);
-                gameManager.logDiscard();
                 gameObject.GetComponent<TileProperties>().setDiscard(true);
+                gameManager.moveTile(gameObject, gameManager.getPlayerAttribute(startParent), gameManager.getPlayerAttribute(dropZone));
+                gameManager.logDiscard();
                 if (gameObject.GetComponent<TileProperties>().getHidden())
                 {
                     gameObject.GetComponent<TileProperties>().toggleHide();
@@ -83,6 +83,7 @@ public class DragDrop : MonoBehaviour
                 Debug.Log("Halted");
                 destPlayerTemp = gameManager.getPlayerAttribute(dropZone);
                 Debug.Log("Zone: " + gameManager.getPlayerAttribute(dropZone));
+                gameManager.testHand(GameManager.DISCARD);
             }
             else
             {
@@ -109,7 +110,7 @@ public class DragDrop : MonoBehaviour
         {
             //is EVERYTHING here being properly reset? 
             gameManager.unhalt();
-            gameManager.moveTile(gameObject.GetComponent<TileProperties>().getID(), gameObject.GetComponent<TileProperties>().getValue(), GameManager.DISCARD, destPlayerTemp);
+            gameManager.moveTile(gameObject, GameManager.DISCARD, destPlayerTemp);
             gameManager.logDraw();
             gameObject.GetComponent<TileProperties>().setPlayer(destPlayerTemp);
             gameObject.GetComponent<TileProperties>().setDiscard(false);
