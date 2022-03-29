@@ -34,6 +34,7 @@ public class DrawCards : MonoBehaviour
     private List<GameObject> northTiles = new List<GameObject>();
 
     public GameObject toggleButton;
+    public GameObject OKButton;
 
     //private void Awake()
     //{
@@ -111,6 +112,7 @@ public class DrawCards : MonoBehaviour
 
         toggleButton.hideFlags = HideFlags.None;
         toggleButton.SetActive(true);
+        gameManager.setButton(OKButton);
 
         GameObject.Destroy(gameObject);
     }

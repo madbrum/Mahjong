@@ -28,6 +28,8 @@ public class GameManager : MonoBehaviour
     private int temp = 4;
     private GameObject questionTile;
 
+    private GameObject OKButton;
+
     public static GameManager Instance { get; private set; }
 
     private class TileComparer : IComparer<GameObject>
@@ -157,8 +159,15 @@ public class GameManager : MonoBehaviour
         titles[currentPlayer].GetComponent<Image>().sprite = titleImgs[currentPlayer + 4];
     }
 
+    public void setButton(GameObject button)
+    {
+        OKButton = button;
+    }
+
     public void halt(GameObject haltTile)
     {
+        OKButton.hideFlags = HideFlags.None;
+        OKButton.SetActive(true);
         Debug.Log("Current player before halt: " + currentPlayer);
         temp = currentPlayer;
         currentPlayer = 4;
@@ -172,6 +181,8 @@ public class GameManager : MonoBehaviour
 
     public void unhalt()
     {
+        OKButton.hideFlags = HideFlags.HideInHierarchy;
+        OKButton.SetActive(false);
         Debug.Log("\t\t\tBEGIN: " + this.name + " unhalt()");
         Debug.Log("\t\t\t\tTemp value is " + temp);
         currentPlayer = temp;
@@ -290,14 +301,14 @@ public class GameManager : MonoBehaviour
             //}
             prevID = curID;
 
-            if (dupeTiles >= 3 && qSelected)
+            if (dupeTiles >= clicks && qSelected)
             {
                 Debug.Log("Valid Draw");
                 return true;
             }
-            Debug.Log("Test: incTiles >= 3 && getPlayerAttribute(destination) == temp");
-            Debug.Log((incTiles >= 3) + " " + getPlayerAttribute(destination) + " == " + temp + " " + (getPlayerAttribute(destination) == temp));
-            if (incTiles >= 3 && getPlayerAttribute(destination) == temp && qSelected)
+            Debug.Log("Test: incTiles == 3 && getPlayerAttribute(destination) == temp");
+            Debug.Log((incTiles == 3) + " " + getPlayerAttribute(destination) + " == " + temp + " " + (getPlayerAttribute(destination) == temp));
+            if (clicks == 3 && incTiles == 3 && getPlayerAttribute(destination) == temp && qSelected)
             {
                 Debug.Log("Valid Draw");
                 return true;

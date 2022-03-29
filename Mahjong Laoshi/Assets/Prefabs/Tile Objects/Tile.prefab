@@ -95,6 +95,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   canvas: {fileID: 0}
+  OKbutton: {fileID: 6918337620470599397, guid: f46e3a5784a317d4ea595a9b39b40148, type: 3}
 --- !u!114 &-8435135028038370876
 MonoBehaviour:
   m_ObjectHideFlags: 0

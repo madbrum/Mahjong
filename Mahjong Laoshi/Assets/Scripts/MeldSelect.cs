@@ -18,10 +18,6 @@ public class MeldSelect : MonoBehaviour
         gameManager.testHand(GameManager.DISCARD);
         Debug.Log(gameObject.transform.parent.name);
         gameManager.incrementClick();
-        if (gameManager.getClicks() >= 3)
-        {
-            gameManager.officiate();
-        }
         Debug.Log("END: " + this.name + " OnClick()");
     }
 

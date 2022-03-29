@@ -62,6 +62,7 @@
     <Compile Include="Assets\Scripts\DragDrop.cs" />
     <Compile Include="Assets\Scripts\DrawCards.cs" />
     <Compile Include="Assets\Scripts\DDOL.cs" />
+    <Compile Include="Assets\Scripts\MeldOfficiate.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">
