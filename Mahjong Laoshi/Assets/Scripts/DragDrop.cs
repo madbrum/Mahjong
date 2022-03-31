@@ -111,7 +111,10 @@ public class DragDrop : MonoBehaviour
             //is EVERYTHING here being properly reset? 
             gameManager.unhalt();
             gameManager.moveTile(gameObject, GameManager.DISCARD, destPlayerTemp);
-            gameManager.logDraw();
+            if (gameManager.getClicks() == 3)
+            {
+                gameManager.logDraw();
+            }
             gameObject.GetComponent<TileProperties>().setPlayer(destPlayerTemp);
             gameObject.GetComponent<TileProperties>().setDiscard(false);
             gameManager.logPlayer(destPlayerTemp);

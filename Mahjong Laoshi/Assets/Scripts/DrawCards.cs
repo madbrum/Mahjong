@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -69,6 +70,7 @@ public class DrawCards : MonoBehaviour
 
     public void OnClick()
     {
+        readTest();
         for (int i = 0; i < 13; i++)
         {
             dealSingle(eastTiles, EastArea, GameManager.EAST);
@@ -128,5 +130,56 @@ public class DrawCards : MonoBehaviour
         single.SetActive(true);
         single.GetComponent<TileProperties>().setPlayer(player);
         single.transform.SetParent(area.transform, false);
+    }
+
+    private string[] readTest()
+    {
+        string[] txthands = System.IO.File.ReadAllLines(@"C:\Users\s-brumleyma\Documents\GitHub\Mahjong\Mahjong Laoshi\Assets\TEST file input.txt");
+        return txthands;
+    }
+
+    private void instantiateTest(string[] txthands)
+    {
+        for (int i = 0; i < txthands[0].Length; i++)
+        {
+            string[] handTilesTxt = txthands[0].Split(",".ToCharArray());
+            for (int j = 0; j < handTilesTxt.Length; j++)
+            {
+                int id = int.Parse(handTilesTxt[j].Substring(0, 1));
+                int value = int.Parse(handTilesTxt[j].Substring(2));
+                int index = (id * 9) + (value - 1);
+                //GameObject single = tiles[randomIndex];
+                //hand.Add(single);
+                //tiles.RemoveAt(randomIndex);
+                //single.hideFlags = HideFlags.None;
+                //single.SetActive(true);
+                //single.GetComponent<TileProperties>().setPlayer(player);
+                //single.transform.SetParent(area.transform, false);
+                //id * 9 + (value - 1) 
+            }
+        }
+    }
+
+    private int getTileIndex(int id, int value, int origin)
+    {
+        int tileIndex = -1;
+        for (int i = tiles.Count - 1; i >= 0; i--)
+        {
+            TileProperties props = tiles[i].GetComponent<TileProperties>();
+            if (props.getID() == id && props.getValue() == value)
+            {
+                if (origin != GameManager.DISCARD)
+                {
+                    tileIndex = i;
+                    break;
+                }
+                else if (props.getSelect())
+                {
+                    tileIndex = i;
+                    break;
+                }
+            }
+        }
+        return tileIndex;
     }
 }

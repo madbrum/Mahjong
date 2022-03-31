@@ -233,13 +233,20 @@ public class GameManager : MonoBehaviour
         return areas.IndexOf(area);
     }
 
-    public void officiate()
+    public void officiate(bool check)
     {
         Debug.Log("\tBEGIN: " + this.name + " officiate()");
         Debug.Log("\tTile in question: " + analyzeTile(questionTile));
         testHand(GameManager.DISCARD);
         Debug.Log(questionTile.transform.parent.name);
-        questionTile.GetComponent<DragDrop>().officiate(checkValidMeld(questionTile, questionTile.transform.parent.gameObject));
+        if (check)
+        {
+            questionTile.GetComponent<DragDrop>().officiate(checkValidMeld(questionTile, questionTile.transform.parent.gameObject));
+        }
+        else
+        {
+            questionTile.GetComponent<DragDrop>().officiate(check);
+        }
         Debug.Log("\tEND: " + this.name + " officiate()");
     }
 
