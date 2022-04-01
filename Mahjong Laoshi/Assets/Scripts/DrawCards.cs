@@ -34,6 +34,9 @@ public class DrawCards : MonoBehaviour
     private List<GameObject> westTiles = new List<GameObject>();
     private List<GameObject> northTiles = new List<GameObject>();
 
+    private List<GameObject>[] hands;
+    private List<GameObject> areas;
+
     public GameObject toggleButton;
     public GameObject OKButton;
 
@@ -48,6 +51,8 @@ public class DrawCards : MonoBehaviour
         gameManager = GameManager.Instance;
         TileSprites = Resources.LoadAll<Sprite>("TileSprites");
         //27 normal + 4 directions + 3 dragons 
+        hands = new List<GameObject>[]{ eastTiles, southTiles, westTiles, northTiles };
+        areas = new List<GameObject> { EastArea, SouthArea, WestArea, NorthArea };
         int keyCount = 0;
         for (int i = 0; i < TileSprites.Length; i++)
         {
@@ -70,15 +75,22 @@ public class DrawCards : MonoBehaviour
 
     public void OnClick()
     {
-        readTest();
-        for (int i = 0; i < 13; i++)
+        string[] test = readTest();
+        if (test == null)
         {
+            for (int i = 0; i < 13; i++)
+            {
+                dealSingle(eastTiles, EastArea, GameManager.EAST);
+                dealSingle(southTiles, SouthArea, GameManager.SOUTH);
+                dealSingle(westTiles, WestArea, GameManager.WEST);
+                dealSingle(northTiles, NorthArea, GameManager.NORTH);
+            }
             dealSingle(eastTiles, EastArea, GameManager.EAST);
-            dealSingle(southTiles, SouthArea, GameManager.SOUTH);
-            dealSingle(westTiles, WestArea, GameManager.WEST);
-            dealSingle(northTiles, NorthArea, GameManager.NORTH);
         }
-        dealSingle(eastTiles, EastArea, GameManager.EAST);
+        else
+        {
+            instantiateTest(test);
+        }
         gameManager.logDraw();
 
         gameManager.initHand(eastTiles, GameManager.EAST);
@@ -121,7 +133,6 @@ public class DrawCards : MonoBehaviour
 
     private void dealSingle(List<GameObject> hand, GameObject area, int player)
     {
-        //1=east 2=south 3=west 4=north
         int randomIndex = Random.Range(0, tiles.Count);
         GameObject single = tiles[randomIndex];
         hand.Add(single);
@@ -132,52 +143,56 @@ public class DrawCards : MonoBehaviour
         single.transform.SetParent(area.transform, false);
     }
 
+    private void dealSingle(List<GameObject> hand, GameObject area, int index, int player)
+    {
+        GameObject single = tiles[index];
+        hand.Add(single);
+        tiles.RemoveAt(index);
+        single.hideFlags = HideFlags.None;
+        single.SetActive(true);
+        single.GetComponent<TileProperties>().setPlayer(player);
+        single.transform.SetParent(area.transform, false);
+    }
+
     private string[] readTest()
     {
-        string[] txthands = System.IO.File.ReadAllLines(@"C:\Users\s-brumleyma\Documents\GitHub\Mahjong\Mahjong Laoshi\Assets\TEST file input.txt");
-        return txthands;
+        string[] txthands = System.IO.File.ReadAllLines(@"C:\Users\s-brumleyma\Documents\GitHub\Mahjong\Mahjong Laoshi\Assets\Resources\TEST file input.txt");
+        if (txthands[0].Equals("empty"))
+        {
+            return null;
+        }
+        else
+        {
+            return txthands;
+        }
+        
     }
 
     private void instantiateTest(string[] txthands)
     {
-        for (int i = 0; i < txthands[0].Length; i++)
+        for (int i = 0; i < txthands.Length; i++)
         {
-            string[] handTilesTxt = txthands[0].Split(",".ToCharArray());
+            string[] handTilesTxt = txthands[i].Split(",".ToCharArray());
             for (int j = 0; j < handTilesTxt.Length; j++)
             {
                 int id = int.Parse(handTilesTxt[j].Substring(0, 1));
                 int value = int.Parse(handTilesTxt[j].Substring(2));
-                int index = (id * 9) + (value - 1);
-                //GameObject single = tiles[randomIndex];
-                //hand.Add(single);
-                //tiles.RemoveAt(randomIndex);
-                //single.hideFlags = HideFlags.None;
-                //single.SetActive(true);
-                //single.GetComponent<TileProperties>().setPlayer(player);
-                //single.transform.SetParent(area.transform, false);
-                //id * 9 + (value - 1) 
+                int index = getTileIndex(id, value);
+                dealSingle(hands[i], areas[i], index, i);
             }
         }
     }
 
-    private int getTileIndex(int id, int value, int origin)
+    private int getTileIndex(int id, int value)
     {
         int tileIndex = -1;
-        for (int i = tiles.Count - 1; i >= 0; i--)
+        for (int i = 0; i < tiles.Count; i++)
         {
             TileProperties props = tiles[i].GetComponent<TileProperties>();
             if (props.getID() == id && props.getValue() == value)
             {
-                if (origin != GameManager.DISCARD)
-                {
-                    tileIndex = i;
-                    break;
-                }
-                else if (props.getSelect())
-                {
-                    tileIndex = i;
-                    break;
-                }
+                tileIndex = i;
+                break;
             }
         }
         return tileIndex;

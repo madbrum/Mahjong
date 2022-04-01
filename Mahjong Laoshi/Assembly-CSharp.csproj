@@ -65,8 +65,8 @@
     <Compile Include="Assets\Scripts\DDOL.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Assets\TEST file input.txt" />
     <None Include="Assets\Resources\TEST file input.txt" />
+    <None Include="Assets\Resources\test inputs.txt" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">
