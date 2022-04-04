@@ -2274,6 +2274,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Tile: {fileID: 6550876895091395685, guid: c4c5bc61080c8364da697bdccef86d94, type: 3}
+  testInput: {fileID: 4900000, guid: b5c615428e3edf747b6eb79b01c77c96, type: 3}
   EastWall: {fileID: 1340755887}
   SouthWall: {fileID: 864536598}
   WestWall: {fileID: 1375267473}

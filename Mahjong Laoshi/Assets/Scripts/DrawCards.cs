@@ -8,6 +8,9 @@ public class DrawCards : MonoBehaviour
 {
     public GameObject Tile;
 
+    [SerializeField]
+    private TextAsset testInput;
+
     public GameObject EastWall;
     public GameObject SouthWall;
     public GameObject WestWall;
@@ -156,7 +159,12 @@ public class DrawCards : MonoBehaviour
 
     private string[] readTest()
     {
-        string[] txthands = System.IO.File.ReadAllLines(@"C:\Users\s-brumleyma\Documents\GitHub\Mahjong\Mahjong Laoshi\Assets\Resources\TEST file input.txt");
+        Debug.Log(testInput);
+        string[] txthands = testInput.ToString().Split("\n".ToCharArray());
+        Debug.Log(txthands[0]);
+        Debug.Log(txthands[1]);
+        Debug.Log(txthands[2]);
+        Debug.Log(txthands[3]);
         if (txthands[0].Equals("empty"))
         {
             return null;
@@ -172,14 +180,28 @@ public class DrawCards : MonoBehaviour
     {
         for (int i = 0; i < txthands.Length; i++)
         {
-            string[] handTilesTxt = txthands[i].Split(",".ToCharArray());
-            for (int j = 0; j < handTilesTxt.Length; j++)
+            Debug.Log(txthands[i].Contains("random"));
+            Debug.Log(txthands[i].Equals("random"));
+            if (txthands[i].Contains("random"))
             {
-                int id = int.Parse(handTilesTxt[j].Substring(0, 1));
-                int value = int.Parse(handTilesTxt[j].Substring(2));
-                int index = getTileIndex(id, value);
-                dealSingle(hands[i], areas[i], index, i);
+                for (int j = 0; j < 13; j++)
+                {
+                    dealSingle(hands[i], areas[i], i);
+                }
             }
+            else
+            {
+                string[] handTilesTxt = txthands[i].Split(",".ToCharArray());
+                for (int j = 0; j < handTilesTxt.Length; j++)
+                {
+                    Debug.Log(handTilesTxt[j]);
+                    int id = int.Parse(handTilesTxt[j].Substring(0, 1));
+                    int value = int.Parse(handTilesTxt[j].Substring(2));
+                    int index = getTileIndex(id, value);
+                    dealSingle(hands[i], areas[i], index, i);
+                }
+            }
+           
         }
     }
 

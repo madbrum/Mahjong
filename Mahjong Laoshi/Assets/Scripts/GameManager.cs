@@ -273,6 +273,7 @@ public class GameManager : MonoBehaviour
             bool selected = destHand[i].GetComponent<TileProperties>().getSelect();
             int curValue = destHand[i].GetComponent<TileProperties>().getValue();
             int curID = destHand[i].GetComponent<TileProperties>().getID();
+            bool melded = destHand[i].GetComponent<TileProperties>().getMeld();
             if (selected && destHand[i].Equals(questionTile))
             {
                 qSelected = true;
@@ -299,6 +300,10 @@ public class GameManager : MonoBehaviour
                 {
                     prevValue = curValue;
                     incTiles = 1;
+                }
+                if (melded)
+                {
+                    return false;
                 }
             }
             //else
