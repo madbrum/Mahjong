@@ -422,18 +422,15 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    //private int[,] buildMatrix(List<GameObject> hand)
-    //{
-    //    int[,] handMatrix = new int[4,9];
-    //    return handMatrix;
-    //    for (int i = 0; i < handMatrix.Length; i++)
-    //    {
-    //        for (int j = 0; j < handMatrix.GetLength(1); j++)
-    //        {
-
-    //        }
-    //    }
-    //}
+    private int[,] buildMatrix(List<GameObject> hand)
+    {
+        int[,] handMatrix = new int[4, 9];
+        return handMatrix;
+        for (int i = 0; i < hand.Count; i++)
+        {
+            TileProperties tileP = hand[i].GetComponent<TileProperties>();
+        }
+    }
 
     public void testState()
     {
