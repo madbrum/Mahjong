@@ -103,6 +103,15 @@ public class GameManager : MonoBehaviour
 
     public void logDraw()
     {
+        bool win = checkMahjong(currentPlayer);
+        if (win)
+        {
+            Debug.Log("win");
+        }
+        else
+        {
+            Debug.Log("lose");
+        }
         drawn = true;
     }
 
@@ -241,7 +250,15 @@ public class GameManager : MonoBehaviour
         Debug.Log(questionTile.transform.parent.name);
         if (check)
         {
-            questionTile.GetComponent<DragDrop>().officiate(checkValidMeld(questionTile, questionTile.transform.parent.gameObject));
+            if (checkMahjong(getPlayerAttribute(questionTile.transform.parent.gameObject)))
+            {
+                Debug.Log("win");
+                questionTile.GetComponent<DragDrop>().officiate(true);
+            }
+            else
+            {
+                questionTile.GetComponent<DragDrop>().officiate(checkValidMeld(questionTile, questionTile.transform.parent.gameObject));
+            }
         }
         else
         {
@@ -250,8 +267,7 @@ public class GameManager : MonoBehaviour
         Debug.Log("\tEND: " + this.name + " officiate()");
     }
 
-    //TODO: overload that returns the potential formed melds? we need to know so we can reveal them and change their flags 
-    //form two lists for dupes and incs and if there's enough dupes to form a valid meld, return that first. otherwise if the incs are valid, return that. otherwise return empty list 
+    //will be replaced but exists as a way to verify function outputs 
     public bool checkValidMeld(GameObject tile, GameObject destination)
     {
         int player = getPlayerAttribute(destination);
@@ -266,7 +282,6 @@ public class GameManager : MonoBehaviour
         int dupeTiles = 0;
         int incTiles = 0;
         int prevValue = 0;
-        int prevID = destHand[0].GetComponent<TileProperties>().getID();
         bool qSelected = false;
         for (int i = 0; i < destHand.Count; i++)
         {
@@ -280,21 +295,14 @@ public class GameManager : MonoBehaviour
             }
             if (selected && curID == tileQID && curValue == tileQV)
             {
-                Debug.Log("Selected reading dupe");
                 dupeTiles++;
             }
-            Debug.Log("Test is as follows: ");
-            Debug.Log("selected && tileQID < 3 && curID == tileQID && curValue >= tileQV - 2 && curValue <= tileQV + 2");
-            Debug.Log(selected + " " + (tileQID < 3) + " " + (curID == tileQID) + " " + (curValue >= tileQV - 2) + " " + (curValue <= tileQV + 2));
-            Debug.Log("curID = " + curID + ", tileQID = " + tileQID + ", prevID = " + prevID + ", curValue = " + curValue + ", tileQV = " + tileQV + " incTiles = " + incTiles + " prevValue = " + prevValue);
             if (selected && tileQID < 3 && curID == tileQID && curValue >= tileQV - 2 && curValue <= tileQV + 2)
             {
-                Debug.Log("Selected reading count");
                 if ((prevValue == 0 || curValue == prevValue + 1) && prevValue != curValue)
                 {
                     incTiles++;
                     prevValue = curValue;
-                    Debug.Log("IncTiles increased. Now " + incTiles);
                 }
                 else if (prevValue != curValue)
                 {
@@ -306,28 +314,64 @@ public class GameManager : MonoBehaviour
                     return false;
                 }
             }
-            //else
-            //{
-            //    incTiles = 0;
-            //    prevValue = 0;
-            //}
-            prevID = curID;
 
             if (dupeTiles >= clicks && qSelected)
             {
-                Debug.Log("Valid Draw");
                 return true;
             }
-            Debug.Log("Test: incTiles == 3 && getPlayerAttribute(destination) == temp");
-            Debug.Log((incTiles == 3) + " " + getPlayerAttribute(destination) + " == " + temp + " " + (getPlayerAttribute(destination) == temp));
             if (clicks == 3 && incTiles == 3 && getPlayerAttribute(destination) == temp && qSelected)
             {
-                Debug.Log("Valid Draw");
                 return true;
             }
         }
-        Debug.Log("Illegal Draw");
         return false;
+    }
+
+    public bool checkMahjong(int player)
+    {
+        int[,] handMatrix = buildMatrix(hands[player]);
+        if (halted)
+        {
+            handMatrix[questionTile.GetComponent<TileProperties>().getID(), questionTile.GetComponent<TileProperties>().getValue() - 1]++;
+        }
+        int melds = 0;
+        int eyes = 0;
+        for (int i = 0; i < handMatrix.GetLength(0); i++)
+        {
+            for (int j = 0; j < handMatrix.GetLength(1); j++)
+            {
+                if (handMatrix[i, j] >= 3)
+                {
+                    melds++;
+                }
+                else if (handMatrix[i, j] == 2)
+                {
+                    if (eyes < 1)
+                    {
+                        eyes++;
+                    }
+                }
+                else if (handMatrix[i, j] == 1)
+                {
+                    if (j + 2 < handMatrix.GetLength(1))
+                    {
+                        if (handMatrix[i, j+1] == 1 && handMatrix[i, j+2] == 1)
+                        {
+                            melds++;
+                            j += 3;
+                        }
+                    }
+                }
+            }
+        }
+        if (melds == 4 & eyes == 1)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 
     public void enableSelection(int player)
@@ -387,33 +431,11 @@ public class GameManager : MonoBehaviour
         return tileIndex;
     }
 
-    private int getTileIndex(int id, int value, int origin)
-    {
-        int tileIndex = -1;
-        for (int i = hands[origin].Count - 1; i >= 0; i--)
-        {
-            TileProperties props = hands[origin][i].GetComponent<TileProperties>();
-            if (props.getID() == id && props.getValue() == value)
-            {
-                if (origin != GameManager.DISCARD)
-                {
-                    tileIndex = i;
-                    break;
-                }
-                else if (props.getSelect())
-                {
-                    tileIndex = i;
-                    break;
-                }
-            }
-        }
-        return tileIndex;
-    }
-
     private void Update()
     {
         if (drawn && discarded)
         {
+            checkMahjong(currentPlayer);
             titles[currentPlayer].GetComponent<Image>().sprite = titleImgs[currentPlayer];
             currentPlayer = (currentPlayer + 1) % 4;
             titles[currentPlayer].GetComponent<Image>().sprite = titleImgs[currentPlayer + 4];
@@ -425,11 +447,14 @@ public class GameManager : MonoBehaviour
     private int[,] buildMatrix(List<GameObject> hand)
     {
         int[,] handMatrix = new int[4, 9];
-        return handMatrix;
         for (int i = 0; i < hand.Count; i++)
-        {
+        { 
             TileProperties tileP = hand[i].GetComponent<TileProperties>();
+            int id = tileP.getID();
+            int valueIndex = tileP.getValue() - 1;
+            handMatrix[id,valueIndex]++;
         }
+        return handMatrix;
     }
 
     public void testState()

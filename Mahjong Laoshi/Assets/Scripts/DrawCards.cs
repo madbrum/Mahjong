@@ -92,7 +92,6 @@ public class DrawCards : MonoBehaviour
         {
             instantiateTest(test);
         }
-        gameManager.logDraw();
 
         gameManager.initHand(eastTiles, GameManager.EAST);
         gameManager.initHand(southTiles, GameManager.SOUTH);
@@ -128,6 +127,8 @@ public class DrawCards : MonoBehaviour
         toggleButton.hideFlags = HideFlags.None;
         toggleButton.SetActive(true);
         gameManager.setButton(OKButton);
+
+        gameManager.logDraw();
 
         GameObject.Destroy(gameObject);
     }
@@ -172,14 +173,12 @@ public class DrawCards : MonoBehaviour
 
     private void instantiateTest(string[] txthands)
     {
+        List<int> randoms = new List<int>();
         for (int i = 0; i < txthands.Length; i++)
         {
             if (txthands[i].Equals("random"))
             {
-                for (int j = 0; j < 13; j++)
-                {
-                    dealSingle(hands[i], areas[i], i);
-                }
+                randoms.Add(i);
             }
             else
             {
@@ -192,7 +191,17 @@ public class DrawCards : MonoBehaviour
                     dealSingle(hands[i], areas[i], index, i);
                 }
             }
-           
+        }
+        for (int m = 0; m < randoms.Count; m++)
+        {
+            for (int j = 0; j < 13; j++)
+            {
+                dealSingle(hands[randoms[m]], areas[randoms[m]], randoms[m]);
+            }
+            if (randoms[m] == GameManager.EAST)
+            {
+                dealSingle(hands[randoms[m]], areas[randoms[m]], randoms[m]);
+            }
         }
     }
 

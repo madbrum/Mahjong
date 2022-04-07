@@ -744,7 +744,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9121404178174492043, guid: dac8a4c91b831794189302b9d34ced31, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 200
+      value: 214
       objectReference: {fileID: 0}
     - target: {fileID: 9121404178174492043, guid: dac8a4c91b831794189302b9d34ced31, type: 3}
       propertyPath: m_LocalPosition.x
@@ -780,7 +780,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9121404178174492043, guid: dac8a4c91b831794189302b9d34ced31, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 350
+      value: 343
       objectReference: {fileID: 0}
     - target: {fileID: 9121404178174492043, guid: dac8a4c91b831794189302b9d34ced31, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -2274,7 +2274,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Tile: {fileID: 6550876895091395685, guid: c4c5bc61080c8364da697bdccef86d94, type: 3}
-  testInput: {fileID: 4900000, guid: b5c615428e3edf747b6eb79b01c77c96, type: 3}
   EastWall: {fileID: 1340755887}
   SouthWall: {fileID: 864536598}
   WestWall: {fileID: 1375267473}

@@ -21,6 +21,10 @@ public class MeldOfficiate : MonoBehaviour
         {
             gameManager.officiate(true);
         }
+        else if (numClicks == 0)
+        {
+            gameManager.officiate(true);
+        }
         else
         {
             gameManager.officiate(false);
