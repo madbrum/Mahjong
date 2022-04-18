@@ -61,7 +61,6 @@ public class DragDrop : MonoBehaviour
     public void endDrag()
     {
         isDragging = false;
-        gameObject.GetComponent<TileProperties>().testTileState();
         if (inDropZone)
         {
             transform.SetParent(dropZone.transform, false);
@@ -74,16 +73,18 @@ public class DragDrop : MonoBehaviour
                 {
                     gameObject.GetComponent<TileProperties>().toggleHide();
                 }
+                if (gameManager.getHand(GameManager.DISCARD).Count > 24)
+                {
+                    int multiplier = gameManager.getHand(GameManager.DISCARD).Count % 24;
+                    //dropzone.transform
+                }
             }
             else if (!dropZone.Equals(gameManager.getArea(GameManager.DISCARD)) && gameObject.GetComponent<TileProperties>().getDiscard() && gameObject.GetComponent<TileProperties>().getPlayer() != gameManager.getPlayerAttribute(dropZone))
             {
                 gameObject.GetComponent<Button>().enabled = true;
                 gameManager.enableSelection(gameManager.getPlayerAttribute(dropZone));
                 gameManager.halt(gameObject);
-                Debug.Log("Halted");
                 destPlayerTemp = gameManager.getPlayerAttribute(dropZone);
-                Debug.Log("Zone: " + gameManager.getPlayerAttribute(dropZone));
-                gameManager.testHand(GameManager.DISCARD);
             }
             else
             {
@@ -100,15 +101,8 @@ public class DragDrop : MonoBehaviour
 
     public void officiate(bool valid)
     {
-        Debug.Log("\t\tBEGIN: " + this.name + " officiate(bool valid)" + " parameter valid = " + valid);
-        Debug.Log("\t\tEssential values:");
-        Debug.Log("\t\t\tdestPlayerTemp = " + destPlayerTemp + ", DropZone id is " + gameManager.getPlayerAttribute(dropZone) + ". Should be equal, though DropZone is not used.");
-        Debug.Log("This is the discarded tile. Should match with the tile printed in GameManager on officiate. " + gameManager.analyzeTile(gameObject));
-        gameManager.testHand(destPlayerTemp);
-        gameManager.testHand(GameManager.DISCARD);
         if (valid)
         {
-            //is EVERYTHING here being properly reset? 
             gameManager.unhalt();
             gameManager.moveTile(gameObject, GameManager.DISCARD, destPlayerTemp);
             if (gameManager.getClicks() == 3)
@@ -118,8 +112,6 @@ public class DragDrop : MonoBehaviour
             gameObject.GetComponent<TileProperties>().setPlayer(destPlayerTemp);
             gameObject.GetComponent<TileProperties>().setDiscard(false);
             gameManager.logPlayer(destPlayerTemp);
-            Debug.Log("\t\t\tCurrent status: Drawn is " + gameManager.drawStatus() + " and discard status is " + gameManager.discardStatus());
-            Debug.Log("Meld is valid and changes have been made. Compare current state of question tile to previous: " + gameManager.analyzeTile(gameObject));
         }
         else
         {
@@ -127,14 +119,8 @@ public class DragDrop : MonoBehaviour
             transform.position = startPosition;
             transform.SetParent(startParent.transform, false);
             gameManager.disableSelection(GameManager.DISCARD, valid);
-            Debug.Log("Meld has been declared invalid. Player is " + gameManager.getCurrentPlayer() + "Current status: Drawn is " + gameManager.drawStatus() + " and discard status is " + gameManager.discardStatus() + ". Compare current state of question tile to previous: " + gameManager.analyzeTile(gameObject));
         }
-        //bug is probably that discarded tiles aren't being disabled either 
         gameManager.disableSelection(destPlayerTemp, valid);
-        gameManager.testHand(destPlayerTemp);
-        gameManager.testHand(GameManager.DISCARD);
-        Debug.Log("officiate has completed. Compare current state of question tile to previous: " + gameManager.analyzeTile(gameObject));
         destPlayerTemp = -1;
-        Debug.Log("\t\tEND: " + this.name + " officiate(bool valid)" + " parameter valid = " + valid);
     }
 }

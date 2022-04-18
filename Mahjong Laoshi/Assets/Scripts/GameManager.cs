@@ -104,15 +104,17 @@ public class GameManager : MonoBehaviour
     public void logDraw()
     {
         bool win = checkMahjong(currentPlayer);
-        if (win)
-        {
-            Debug.Log("win");
-        }
-        else
-        {
-            Debug.Log("lose");
-        }
         drawn = true;
+    }
+
+    public void logDraw(int id, int value)
+    {
+        bool win = checkMahjong(currentPlayer);
+        int[,] handMatrix = buildMatrix(hands[currentPlayer]);
+        if (handMatrix[id,value-1] != 4)
+        {
+            drawn = true;
+        }
     }
 
     public void incrementClick()
@@ -177,11 +179,8 @@ public class GameManager : MonoBehaviour
     {
         OKButton.hideFlags = HideFlags.None;
         OKButton.SetActive(true);
-        Debug.Log("Current player before halt: " + currentPlayer);
         temp = currentPlayer;
         currentPlayer = 4;
-        Debug.Log("Temp is now " + temp);
-        Debug.Log("Current player is now " + currentPlayer);
         questionTile = haltTile;
         drawn = false;
         discarded = false;
@@ -192,14 +191,9 @@ public class GameManager : MonoBehaviour
     {
         OKButton.hideFlags = HideFlags.HideInHierarchy;
         OKButton.SetActive(false);
-        Debug.Log("\t\t\tBEGIN: " + this.name + " unhalt()");
-        Debug.Log("\t\t\t\tTemp value is " + temp);
         currentPlayer = temp;
         temp = 4;
-        Debug.Log("\t\t\t\tUnhalted. Current player: " + currentPlayer);
-        Debug.Log("\t\t\t\tTemp is now " + temp);
         halted = false;
-        Debug.Log("\t\t\tEND: " + this.name + " unhalt()");
     }
 
     public bool getHalt()
@@ -213,7 +207,6 @@ public class GameManager : MonoBehaviour
     }
     public void initArea(GameObject area)
     {
-        //areas[player] = area;
         areas.Add(area);
     }
 
@@ -224,17 +217,10 @@ public class GameManager : MonoBehaviour
 
     public void moveTile(GameObject tileP, int originID, int destinationID)
     {
-        Debug.Log("\t\t\tBEGIN: " + this.name + " moveTile(int id, int value, int originID, int destinationID) with parameters: tileP = " + tileP.name + " OriginID = " + originID + " DestinationID = " + destinationID);
-        testHand(originID);
-        testHand(destinationID);
         int tileIndex = getTileIndex(tileP, originID);
-        Debug.Log("Tile Index is " + tileIndex);
         GameObject tile = hands[originID][tileIndex];
         hands[originID].RemoveAt(tileIndex);
         hands[destinationID].Add(tile);
-        testHand(originID);
-        testHand(destinationID);
-        Debug.Log("Moved tile from " + originID + " to " + destinationID + ". Id and Value are " + tileP.name);
     }
 
     public int getPlayerAttribute(GameObject area)
@@ -244,15 +230,10 @@ public class GameManager : MonoBehaviour
 
     public void officiate(bool check)
     {
-        Debug.Log("\tBEGIN: " + this.name + " officiate()");
-        Debug.Log("\tTile in question: " + analyzeTile(questionTile));
-        testHand(GameManager.DISCARD);
-        Debug.Log(questionTile.transform.parent.name);
         if (check)
         {
             if (checkMahjong(getPlayerAttribute(questionTile.transform.parent.gameObject)))
             {
-                Debug.Log("win");
                 questionTile.GetComponent<DragDrop>().officiate(true);
             }
             else
@@ -264,7 +245,6 @@ public class GameManager : MonoBehaviour
         {
             questionTile.GetComponent<DragDrop>().officiate(check);
         }
-        Debug.Log("\tEND: " + this.name + " officiate()");
     }
 
     //will be replaced but exists as a way to verify function outputs 
@@ -274,8 +254,6 @@ public class GameManager : MonoBehaviour
         List<GameObject> destHand = new List<GameObject>(hands[player]);
         destHand.Add(tile);
         destHand.Sort(new TileComparer());
-        printList(destHand);
-        printList(hands[GameManager.DISCARD]);
 
         int tileQV = tile.GetComponent<TileProperties>().getValue();
         int tileQID = tile.GetComponent<TileProperties>().getID();
@@ -366,10 +344,12 @@ public class GameManager : MonoBehaviour
         }
         if (melds == 4 & eyes == 1)
         {
+            Debug.Log("win!");
             return true;
         }
         else
         {
+            Debug.Log("lose");
             return false;
         }
     }
@@ -385,8 +365,6 @@ public class GameManager : MonoBehaviour
     
     public void disableSelection(int player, bool valid)
     {
-        Debug.Log("\t\t\tBEGIN: " + this.name + " disableSelection(int player, bool valid)" + " parameters: player = " + player + ", valid = " + valid);
-        testHand(player);
         clicks = 0;
         int test = 0;
         int melds = 0;
@@ -398,22 +376,15 @@ public class GameManager : MonoBehaviour
                 test++;
                 if (tile.GetComponent<TileProperties>().getSelect())
                 {
-                    Debug.Log("Tile is being melded. Tile properties: " + analyzeTile(tile));
                     melds++;
                     tile.GetComponent<TileProperties>().meld();
                     Transform parent = tile.transform.parent;
                     tile.transform.SetParent(null, false);
                     tile.transform.SetParent(parent, false);
-                    Debug.Log("Tile after melding: " + analyzeTile(tile));
                 }
             }
             tile.GetComponent<TileProperties>().deselect();
-            Debug.Log("Tile after running through disableSelection. Selected must be false now. " + analyzeTile(tile));
         }
-        Debug.Log("Number of valid counts : " + test + ", number of tiles that were melded: " + melds);
-        testState();
-        printList(hands[player]);
-        Debug.Log("\t\t\tEND: " + this.name + " disableSelection(int player, bool valid)" + " parameters: player = " + player + ", valid = " + valid);
     }
 
     private int getTileIndex(GameObject tile, int origin)

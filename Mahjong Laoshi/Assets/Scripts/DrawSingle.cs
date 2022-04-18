@@ -20,7 +20,6 @@ public class DrawSingle : MonoBehaviour
         if (location == gameManager.getCurrentPlayer() && !gameManager.drawStatus())
         {
             dealSingle();
-            gameManager.logDraw();
         }
        // gameManager.testState();
     }
@@ -33,6 +32,7 @@ public class DrawSingle : MonoBehaviour
         //1=east 2=south 3=west 4=north
         int randomIndex = Random.Range(0, leftovers.Count);
         GameObject single = leftovers[randomIndex];
+        //TEMPORARY!!!!!!!!
         gameManager.getHand(currentPlayer).Add(single);
         leftovers.RemoveAt(randomIndex);
         single.hideFlags = HideFlags.None;
@@ -43,6 +43,7 @@ public class DrawSingle : MonoBehaviour
         {
             single.GetComponent<TileProperties>().toggleHide();
         }
+        gameManager.logDraw(single.GetComponent<TileProperties>().getID(), single.GetComponent<TileProperties>().getValue());
     }
 
 }
