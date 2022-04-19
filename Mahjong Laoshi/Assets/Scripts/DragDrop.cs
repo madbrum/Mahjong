@@ -12,6 +12,7 @@ public class DragDrop : MonoBehaviour
     private Vector2 startPosition;
     private GameObject startParent;
     private int destPlayerTemp = -1;
+    private static int maxTiles = 18;
     GameManager gameManager;
     private void Awake()
     {
@@ -73,10 +74,20 @@ public class DragDrop : MonoBehaviour
                 {
                     gameObject.GetComponent<TileProperties>().toggleHide();
                 }
-                if (gameManager.getHand(GameManager.DISCARD).Count > 24)
+                if (gameManager.getHand(GameManager.DISCARD).Count > maxTiles)
                 {
-                    int multiplier = gameManager.getHand(GameManager.DISCARD).Count % 24;
-                    //dropzone.transform
+                    if (((maxTiles - 18)/6)%2 == 0)
+                    {
+                        Vector2 cellSize = dropZone.transform.GetComponent<GridLayoutGroup>().cellSize;
+                        float x = cellSize.x;
+                        float y = cellSize.y;
+                        dropZone.transform.GetComponent<GridLayoutGroup>().cellSize = new Vector2(Mathf.Round((float)(x * 0.9)), Mathf.Round((float)(y * 0.9)));
+                    }
+                    else
+                    {
+                        dropZone.transform.GetComponent<GridLayoutGroup>().constraintCount++;
+                    }
+                    maxTiles += 6;
                 }
             }
             else if (!dropZone.Equals(gameManager.getArea(GameManager.DISCARD)) && gameObject.GetComponent<TileProperties>().getDiscard() && gameObject.GetComponent<TileProperties>().getPlayer() != gameManager.getPlayerAttribute(dropZone))
