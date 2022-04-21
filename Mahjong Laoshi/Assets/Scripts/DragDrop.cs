@@ -76,7 +76,7 @@ public class DragDrop : MonoBehaviour
                 }
                 if (gameManager.getHand(GameManager.DISCARD).Count > maxTiles)
                 {
-                    if (((maxTiles - 18)/6)%2 == 0)
+                    if (((maxTiles - 18)/6)%3 == 0)
                     {
                         Vector2 cellSize = dropZone.transform.GetComponent<GridLayoutGroup>().cellSize;
                         float x = cellSize.x;

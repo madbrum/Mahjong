@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
@@ -29,6 +30,7 @@ public class GameManager : MonoBehaviour
     private GameObject questionTile;
 
     private GameObject OKButton;
+    private GameObject instructions;
 
     public static GameManager Instance { get; private set; }
 
@@ -103,7 +105,11 @@ public class GameManager : MonoBehaviour
 
     public void logDraw()
     {
-        bool win = checkMahjong(currentPlayer);
+        bool won = checkMahjong(currentPlayer);
+        if (won)
+        {
+            win(currentPlayer);
+        }
         drawn = true;
     }
 
@@ -213,6 +219,11 @@ public class GameManager : MonoBehaviour
     public void initTitle(GameObject title)
     {
         titles.Add(title);
+    }
+
+    public void giveText(GameObject text)
+    {
+        instructions = text;
     }
 
     public void moveTile(GameObject tileP, int originID, int destinationID)
@@ -352,6 +363,29 @@ public class GameManager : MonoBehaviour
             Debug.Log("lose");
             return false;
         }
+    }
+
+    private void win(int winner)
+    {
+        string winStr = "";
+        if (winner == EAST)
+        {
+            winStr = "EAST";
+        }
+        if (winner == SOUTH)
+        {
+            winStr = "SOUTH";
+        }
+        if (winner == WEST)
+        {
+            winStr = "WEST";
+        }
+        if (winner == NORTH)
+        {
+            winStr = "NORTH";
+        }
+        instructions.SetActive(true);
+        instructions.GetComponent<Text>().text = winStr + " WINS!";
     }
 
     public void enableSelection(int player)

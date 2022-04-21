@@ -4,6 +4,7 @@ using System.IO;
 using System.Text.RegularExpressions;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class DrawCards : MonoBehaviour
 {
@@ -40,6 +41,8 @@ public class DrawCards : MonoBehaviour
 
     public GameObject toggleButton;
     public GameObject OKButton;
+
+    public GameObject instructions;
 
     //private void Awake()
     //{
@@ -128,9 +131,13 @@ public class DrawCards : MonoBehaviour
         toggleButton.SetActive(true);
         gameManager.setButton(OKButton);
 
+        instructions.SetActive(false);
+        gameManager.giveText(instructions);
+
         gameManager.logDraw();
 
-        GameObject.Destroy(gameObject);
+        gameObject.hideFlags = HideFlags.HideInHierarchy;
+        gameObject.SetActive(false);
     }
 
     private void dealSingle(List<GameObject> hand, GameObject area, int player)
