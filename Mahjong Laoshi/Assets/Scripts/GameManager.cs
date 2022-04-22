@@ -347,7 +347,7 @@ public class GameManager : MonoBehaviour
                         if (handMatrix[i, j+1] == 1 && handMatrix[i, j+2] == 1)
                         {
                             melds++;
-                            j += 3;
+                            j += 2;
                         }
                     }
                 }
