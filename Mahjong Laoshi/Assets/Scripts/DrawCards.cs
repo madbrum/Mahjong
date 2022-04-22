@@ -138,6 +138,7 @@ public class DrawCards : MonoBehaviour
 
         gameObject.hideFlags = HideFlags.HideInHierarchy;
         gameObject.SetActive(false);
+        gameManager.setDrawer(gameObject);
     }
 
     private void dealSingle(List<GameObject> hand, GameObject area, int player)

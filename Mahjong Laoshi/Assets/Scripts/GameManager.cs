@@ -30,6 +30,7 @@ public class GameManager : MonoBehaviour
     private GameObject questionTile;
 
     private GameObject OKButton;
+    private GameObject DrawButton;
     private GameObject instructions;
 
     public static GameManager Instance { get; private set; }
@@ -181,6 +182,11 @@ public class GameManager : MonoBehaviour
         OKButton = button;
     }
 
+    public void setDrawer(GameObject drawButn)
+    {
+        DrawButton = drawButn;
+    }
+
     public void halt(GameObject haltTile)
     {
         OKButton.hideFlags = HideFlags.None;
@@ -246,6 +252,7 @@ public class GameManager : MonoBehaviour
             if (checkMahjong(getPlayerAttribute(questionTile.transform.parent.gameObject)))
             {
                 questionTile.GetComponent<DragDrop>().officiate(true);
+                win(currentPlayer);
             }
             else
             {
@@ -385,8 +392,19 @@ public class GameManager : MonoBehaviour
             winStr = "NORTH";
         }
         instructions.SetActive(true);
-        instructions.GetComponent<Text>().text = winStr + " WINS!";
-    }
+        instructions.GetComponentInChildren<Text>().text = winStr + " WINS!";
+
+        hands = new List<GameObject>[6];
+        areas = new List<GameObject>();
+        titles = new List<GameObject>();
+        titleImgs = new Sprite[8];
+        currentPlayer = EAST;
+        drawn = false;
+        discarded = false;
+        halted = false;
+        DrawButton.SetActive(true);
+        DrawButton.hideFlags = HideFlags.None;
+}
 
     public void enableSelection(int player)
     {
