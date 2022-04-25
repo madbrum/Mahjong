@@ -393,18 +393,28 @@ public class GameManager : MonoBehaviour
         }
         instructions.SetActive(true);
         instructions.GetComponentInChildren<Text>().text = winStr + " WINS!";
+        currentPlayer = 4;
+        DrawButton.SetActive(true);
+        DrawButton.hideFlags = HideFlags.None;
+    }
 
+    public void reset()
+    {
         hands = new List<GameObject>[6];
+        for (int i = 0; i < areas.Count; i++)
+        {
+            for (int j = 0; j < areas[i].transform.childCount; j++)
+            {
+                GameObject.Destroy(areas[i].transform.GetChild(j).gameObject);
+            }
+        }
         areas = new List<GameObject>();
-        titles = new List<GameObject>();
-        titleImgs = new Sprite[8];
-        currentPlayer = EAST;
+        hands[DISCARD] = new List<GameObject>();
         drawn = false;
         discarded = false;
         halted = false;
-        DrawButton.SetActive(true);
-        DrawButton.hideFlags = HideFlags.None;
-}
+        currentPlayer = EAST;
+    }
 
     public void enableSelection(int player)
     {

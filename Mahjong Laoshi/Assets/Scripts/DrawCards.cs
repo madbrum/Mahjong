@@ -55,30 +55,12 @@ public class DrawCards : MonoBehaviour
         gameManager = GameManager.Instance;
         TileSprites = Resources.LoadAll<Sprite>("TileSprites");
         //27 normal + 4 directions + 3 dragons 
-        hands = new List<GameObject>[]{ eastTiles, southTiles, westTiles, northTiles };
-        areas = new List<GameObject> { EastArea, SouthArea, WestArea, NorthArea };
-        int keyCount = 0;
-        for (int i = 0; i < TileSprites.Length; i++)
-        {
-            for (int j = 0; j < 4; j++)
-            {
-                GameObject single = Instantiate(Tile, new Vector3(0, 0, 0), Quaternion.identity);
-                single.GetComponent<Button>().enabled = false;
-                single.GetComponent<Image>().sprite = TileSprites[i];
-                single.GetComponent<TileProperties>().setID(i/9);
-                single.GetComponent<TileProperties>().setValue((i % 9) + 1);
-                single.GetComponent<TileProperties>().setKey(keyCount);
-                single.name = "Tile ID: " + single.GetComponent<TileProperties>().getID() + ", Tile Value: " + single.GetComponent<TileProperties>().getValue();
-                single.hideFlags = HideFlags.HideInHierarchy;
-                single.SetActive(false);
-                tiles.Add(single);
-                keyCount++;
-            }
-        }
     }
 
     public void OnClick()
     {
+        gameManager.reset();
+        load();
         string[] test = readTest();
         if (test == null)
         {
@@ -139,6 +121,35 @@ public class DrawCards : MonoBehaviour
         gameObject.hideFlags = HideFlags.HideInHierarchy;
         gameObject.SetActive(false);
         gameManager.setDrawer(gameObject);
+    }
+
+    private void load()
+    {
+        tiles = new List<GameObject>();
+        eastTiles = new List<GameObject>();
+        southTiles = new List<GameObject>();
+        westTiles = new List<GameObject>();
+        northTiles = new List<GameObject>();
+        hands = new List<GameObject>[] { eastTiles, southTiles, westTiles, northTiles };
+        areas = new List<GameObject> { EastArea, SouthArea, WestArea, NorthArea };
+        int keyCount = 0;
+        for (int i = 0; i < TileSprites.Length; i++)
+        {
+            for (int j = 0; j < 4; j++)
+            {
+                GameObject single = Instantiate(Tile, new Vector3(0, 0, 0), Quaternion.identity);
+                single.GetComponent<Button>().enabled = false;
+                single.GetComponent<Image>().sprite = TileSprites[i];
+                single.GetComponent<TileProperties>().setID(i / 9);
+                single.GetComponent<TileProperties>().setValue((i % 9) + 1);
+                single.GetComponent<TileProperties>().setKey(keyCount);
+                single.name = "Tile ID: " + single.GetComponent<TileProperties>().getID() + ", Tile Value: " + single.GetComponent<TileProperties>().getValue();
+                single.hideFlags = HideFlags.HideInHierarchy;
+                single.SetActive(false);
+                tiles.Add(single);
+                keyCount++;
+            }
+        }
     }
 
     private void dealSingle(List<GameObject> hand, GameObject area, int player)
