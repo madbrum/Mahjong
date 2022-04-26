@@ -30,6 +30,7 @@ public class DrawCards : MonoBehaviour
     private Sprite[] TileSprites;
 
     private GameManager gameManager;
+    private AIManager aiManager;
 
     private List<GameObject> eastTiles = new List<GameObject>();
     private List<GameObject> southTiles = new List<GameObject>();
@@ -44,15 +45,10 @@ public class DrawCards : MonoBehaviour
 
     public GameObject instructions;
 
-    //private void Awake()
-    //{
-    //    gameManager = GameManager.Instance;
-    //    Debug.Log("GameManager instance set in DrawCards");
-    //}
-
     void Start()
     {
         gameManager = GameManager.Instance;
+        aiManager = AIManager.Instance;
         TileSprites = Resources.LoadAll<Sprite>("TileSprites");
         //27 normal + 4 directions + 3 dragons 
     }
@@ -99,15 +95,19 @@ public class DrawCards : MonoBehaviour
         EastWall.GetComponent<WallProperties>().setID(GameManager.EAST);
         EastWall.hideFlags = HideFlags.None;
         EastWall.SetActive(true);
+        gameManager.initWalls(EastWall);
         SouthWall.GetComponent<WallProperties>().setID(GameManager.SOUTH);
         SouthWall.hideFlags = HideFlags.None;
         SouthWall.SetActive(true);
+        gameManager.initWalls(SouthWall);
         WestWall.GetComponent<WallProperties>().setID(GameManager.WEST);
         WestWall.hideFlags = HideFlags.None;
         WestWall.SetActive(true);
+        gameManager.initWalls(WestWall);
         NorthWall.GetComponent<WallProperties>().setID(GameManager.NORTH);
         NorthWall.hideFlags = HideFlags.None;
         NorthWall.SetActive(true);
+        gameManager.initWalls(NorthWall);
 
         toggleButton.hideFlags = HideFlags.None;
         toggleButton.SetActive(true);
@@ -117,6 +117,7 @@ public class DrawCards : MonoBehaviour
         gameManager.giveText(instructions);
 
         gameManager.logDraw();
+        aiManager.bonk();
 
         gameObject.hideFlags = HideFlags.HideInHierarchy;
         gameObject.SetActive(false);

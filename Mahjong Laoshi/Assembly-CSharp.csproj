@@ -63,6 +63,7 @@
     <Compile Include="Assets\Scripts\DragDrop.cs" />
     <Compile Include="Assets\Scripts\DrawCards.cs" />
     <Compile Include="Assets\Scripts\DDOL.cs" />
+    <Compile Include="Assets\Scripts\AIManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Resources\TEST file input.txt" />

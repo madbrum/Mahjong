@@ -15,6 +15,7 @@ public class GameManager : MonoBehaviour
 
     private List<GameObject>[] hands = new List<GameObject>[6];
     private List<GameObject> areas = new List<GameObject>();
+    private List<GameObject> walls = new List<GameObject>();
     private List<GameObject> titles = new List<GameObject>();
     private Sprite[] titleImgs = new Sprite[8];
 
@@ -34,6 +35,7 @@ public class GameManager : MonoBehaviour
     private GameObject instructions;
 
     public static GameManager Instance { get; private set; }
+    private AIManager aiManager;
 
     private class TileComparer : IComparer<GameObject>
     {
@@ -69,7 +71,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private void Awake()
+    void Awake()
     {
         if (Instance == null)
         {
@@ -82,6 +84,12 @@ public class GameManager : MonoBehaviour
         }
         hands[DISCARD] = new List<GameObject>();
         titleImgs = Resources.LoadAll<Sprite>("Titles");
+    }
+
+    private void Start()
+    {
+        aiManager = AIManager.Instance;
+        Debug.Log("Instance of AM in GM initialized");
     }
 
     public int getCurrentPlayer()
@@ -97,6 +105,11 @@ public class GameManager : MonoBehaviour
     public List<GameObject> getHand(int player)
     {
         return hands[player];
+    }
+
+    public GameObject getWall(int player)
+    {
+        return walls[player];
     }
 
     public void logDiscard()
@@ -220,6 +233,11 @@ public class GameManager : MonoBehaviour
     public void initArea(GameObject area)
     {
         areas.Add(area);
+    }
+
+    public void initWalls(GameObject wall)
+    {
+        walls.Add(wall);
     }
 
     public void initTitle(GameObject title)
@@ -474,6 +492,7 @@ public class GameManager : MonoBehaviour
             titles[currentPlayer].GetComponent<Image>().sprite = titleImgs[currentPlayer + 4];
             drawn = false;
             discarded = false;
+            aiManager.bonk();
         }
     }
 

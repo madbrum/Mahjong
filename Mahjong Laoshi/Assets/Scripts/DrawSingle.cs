@@ -24,7 +24,7 @@ public class DrawSingle : MonoBehaviour
        // gameManager.testState();
     }
 
-    private void dealSingle()
+    public void dealSingle()
     {
         int currentPlayer = gameManager.getCurrentPlayer();
         GameObject area = gameManager.getArea(currentPlayer);
