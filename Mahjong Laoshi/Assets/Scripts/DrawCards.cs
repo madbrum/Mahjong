@@ -117,7 +117,7 @@ public class DrawCards : MonoBehaviour
         gameManager.giveText(instructions);
 
         gameManager.logDraw();
-        aiManager.bonk();
+        aiManager.draw();
 
         gameObject.hideFlags = HideFlags.HideInHierarchy;
         gameObject.SetActive(false);

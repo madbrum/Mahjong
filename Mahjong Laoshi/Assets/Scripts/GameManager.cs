@@ -25,6 +25,7 @@ public class GameManager : MonoBehaviour
 
     private bool hidden = false;
     private bool halted = false;
+    private bool moving = false;
 
     private int clicks = 0;
     private int temp = 4;
@@ -258,6 +259,14 @@ public class GameManager : MonoBehaviour
         hands[destinationID].Add(tile);
     }
 
+    public GameObject moveTileAtIndex(int tileIndex, int originID, int destinationID)
+    {
+        GameObject tile = hands[originID][tileIndex];
+        hands[originID].RemoveAt(tileIndex);
+        hands[destinationID].Add(tile);
+        return tile;
+    }
+
     public int getPlayerAttribute(GameObject area)
     {
         return areas.IndexOf(area);
@@ -484,7 +493,7 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
-        if (drawn && discarded)
+        if (drawn && discarded && !moving)
         {
             checkMahjong(currentPlayer);
             titles[currentPlayer].GetComponent<Image>().sprite = titleImgs[currentPlayer];
@@ -492,8 +501,22 @@ public class GameManager : MonoBehaviour
             titles[currentPlayer].GetComponent<Image>().sprite = titleImgs[currentPlayer + 4];
             drawn = false;
             discarded = false;
-            aiManager.bonk();
+            StartCoroutine(runAI());
         }
+    }
+
+    private IEnumerator runAI()
+    {
+        yield return new WaitForSeconds(3f);
+        if (!halted)
+        {
+            moving = true;
+            aiManager.draw();
+            yield return new WaitForSeconds(1.5f);
+            aiManager.discard();
+            moving = false;
+        }
+        yield return null;
     }
 
     private int[,] buildMatrix(List<GameObject> hand)
