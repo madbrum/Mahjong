@@ -38,6 +38,8 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance { get; private set; }
     private AIManager aiManager;
 
+    private int TESTAIRUN = 0;
+
     private class TileComparer : IComparer<GameObject>
     {
         public int Compare(GameObject tile1, GameObject tile2)
@@ -203,6 +205,7 @@ public class GameManager : MonoBehaviour
 
     public void halt(GameObject haltTile)
     {
+        StopAllCoroutines();
         OKButton.hideFlags = HideFlags.None;
         OKButton.SetActive(true);
         temp = currentPlayer;
@@ -507,6 +510,14 @@ public class GameManager : MonoBehaviour
 
     private IEnumerator runAI()
     {
+        Debug.Log("Begin AI run #" + TESTAIRUN);
+        if (halted || currentPlayer == 0 || currentPlayer == 4)
+        {
+            Debug.Log("End AI run #" + TESTAIRUN + ", ended on return");
+            TESTAIRUN++;
+            yield break;
+        }
+        
         yield return new WaitForSeconds(3f);
         if (!halted)
         {
@@ -516,7 +527,8 @@ public class GameManager : MonoBehaviour
             aiManager.discard();
             moving = false;
         }
-        yield return null;
+        Debug.Log("End AI run #" + TESTAIRUN);
+        TESTAIRUN++;
     }
 
     private int[,] buildMatrix(List<GameObject> hand)

@@ -68,9 +68,7 @@ public class TileProperties : MonoBehaviour
 
     public void select()
     {
-        Debug.Log("\tBEGIN: " + this.name + " select()");
         selected = true;
-        Debug.Log("\tEND: " + this.name + " selected()");
     }
 
     public void deselect()

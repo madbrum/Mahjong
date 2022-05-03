@@ -13,12 +13,8 @@ public class MeldSelect : MonoBehaviour
 
     public void OnClick()
     {
-        Debug.Log("BEGIN: " + this.name + " OnClick()");
         gameObject.GetComponent<TileProperties>().select();
-        gameManager.testHand(GameManager.DISCARD);
-        Debug.Log(gameObject.transform.parent.name);
         gameManager.incrementClick();
-        Debug.Log("END: " + this.name + " OnClick()");
     }
 
     // Update is called once per frame

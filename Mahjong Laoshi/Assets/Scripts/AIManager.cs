@@ -40,7 +40,7 @@ public class AIManager : MonoBehaviour
             gameManager.getHand(currentPlayer);
             if (!gameManager.drawStatus())
             {
-                yield return new WaitForSeconds((float) 0.5);
+                //yield return new WaitForSeconds((float) 0.5);
                 Button wall = gameManager.getWall(currentPlayer).GetComponent<Button>();
                 Sprite original = wall.GetComponent<Image>().sprite;
                 wall.GetComponent<Image>().CrossFadeColor(wall.colors.pressedColor, wall.colors.fadeDuration, true, true);
@@ -49,7 +49,6 @@ public class AIManager : MonoBehaviour
                 gameManager.getWall(currentPlayer).GetComponent<DrawSingle>().dealSingle();
             }
         }
-        StopCoroutine(drawCrt());
         yield return null;
     }
 
@@ -66,7 +65,7 @@ public class AIManager : MonoBehaviour
             List<GameObject> hand = gameManager.getHand(currentPlayer);
             if (!gameManager.discardStatus())
             {
-                yield return new WaitForSeconds((float)0.5);
+                //yield return new WaitForSeconds((float)0.5);
                 int random = Random.Range(0, hand.Count);
                 GameObject tile = gameManager.moveTileAtIndex(random, currentPlayer, GameManager.DISCARD);
                 tile.transform.SetParent(gameManager.getArea(GameManager.DISCARD).transform, false);
@@ -76,10 +75,9 @@ public class AIManager : MonoBehaviour
                 {
                     tile.GetComponent<TileProperties>().toggleHide();
                 }
-                yield return new WaitForSeconds((float)0.5);
+                //yield return new WaitForSeconds((float)0.5);
             }
         }
-        StopCoroutine(discardCrt());
         yield return null;
     }
 

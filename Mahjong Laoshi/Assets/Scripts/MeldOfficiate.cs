@@ -16,7 +16,6 @@ public class MeldOfficiate : MonoBehaviour
     public void OnClick()
     {
         int numClicks = gameManager.getClicks();
-        Debug.Log("Clicks: " + numClicks);
         if (numClicks <= 4 && numClicks >= 3)
         {
             gameManager.officiate(true);
