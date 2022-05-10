@@ -531,7 +531,7 @@ public class GameManager : MonoBehaviour
         TESTAIRUN++;
     }
 
-    private int[,] buildMatrix(List<GameObject> hand)
+    public int[,] buildMatrix(List<GameObject> hand)
     {
         int[,] handMatrix = new int[4, 9];
         for (int i = 0; i < hand.Count; i++)

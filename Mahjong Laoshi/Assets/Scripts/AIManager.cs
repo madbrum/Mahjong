@@ -7,6 +7,8 @@ public class AIManager : MonoBehaviour
 {
     public static AIManager Instance { get; private set; }
     private GameManager gameManager;
+
+    private int[] filter = { 2, 3, 2 };
     // Start is called before the first frame update
     void Awake()
     {
@@ -79,6 +81,33 @@ public class AIManager : MonoBehaviour
             }
         }
         yield return null;
+    }
+
+    private int discardWorst(int player)
+    {
+        int[,] handMatrix = gameManager.buildMatrix(gameManager.getHand(player));
+        int[,] weightMatrix = new int[4, 9];
+        //returns index of worst tile 
+        return 1;
+    }
+
+    private int weightSingle(int[,] handMatrix, int id, int value, int[] filter)
+    {
+        int[] neighbors = { 0, handMatrix[id, value], 0 };
+        if (value - 1 >= 0)
+        {
+            neighbors[0] = handMatrix[id, value - 1];
+        }
+        if (value + 1 < handMatrix.GetLength(1))
+        {
+            neighbors[2] = handMatrix[id, value + 1];
+        }
+        int weightedValue = 0;
+        for (int i = 0; i < neighbors.Length; i++)
+        {
+            weightedValue += neighbors[i] * filter[i];
+        }
+        return weightedValue; 
     }
 
     // Update is called once per frame
