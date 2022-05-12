@@ -68,6 +68,8 @@ public class AIManager : MonoBehaviour
             if (!gameManager.discardStatus())
             {
                 //yield return new WaitForSeconds((float)0.5);
+                int index = getWorstIndex(currentPlayer);
+                Debug.Log("Index: " + index);
                 int random = Random.Range(0, hand.Count);
                 GameObject tile = gameManager.moveTileAtIndex(random, currentPlayer, GameManager.DISCARD);
                 tile.transform.SetParent(gameManager.getArea(GameManager.DISCARD).transform, false);
@@ -83,16 +85,34 @@ public class AIManager : MonoBehaviour
         yield return null;
     }
 
-    private int discardWorst(int player)
+    private int getWorstIndex(int player)
     {
         int[,] handMatrix = gameManager.buildMatrix(gameManager.getHand(player));
         int[,] weightMatrix = new int[4, 9];
+        int min = int.MaxValue;
+        int minID = -1;
+        int minValue = -1;
+        for (int i = 0; i < handMatrix.GetLength(0); i++)
+        {
+            for (int j = 0; j < handMatrix.GetLength(1); j++)
+            {
+                int weightedValue = weightSingle(handMatrix, i, j);
+                if (weightedValue != 0 && weightedValue <= min)
+                {
+                    min = weightedValue;
+                    minID = i;
+                    minValue = j;
+                }
+                Debug.Log("ID: " + i + ", Value: " + (j + 1) + ", Weighted: " + weightedValue);
+            }
+        }
         //returns index of worst tile 
-        return 1;
+        return getTileIndex(minID, minValue, player);
     }
 
-    private int weightSingle(int[,] handMatrix, int id, int value, int[] filter)
+    private int weightSingle(int[,] handMatrix, int id, int value)
     {
+
         int[] neighbors = { 0, handMatrix[id, value], 0 };
         if (value - 1 >= 0)
         {
@@ -103,15 +123,43 @@ public class AIManager : MonoBehaviour
             neighbors[2] = handMatrix[id, value + 1];
         }
         int weightedValue = 0;
-        for (int i = 0; i < neighbors.Length; i++)
+        if (neighbors[1] == 1)
         {
-            weightedValue += neighbors[i] * filter[i];
+            weightedValue += neighbors[1];
+            if (neighbors[0] < 2)
+            {
+                weightedValue += neighbors[0];
+            }
+            if (neighbors[2] < 2)
+            {
+                weightedValue += neighbors[2];
+            }
+        }
+        else if (neighbors[1] >= 2)
+        {
+            weightedValue += neighbors[1] * 2;
         }
         return weightedValue; 
     }
 
-    // Update is called once per frame
-    void Update()
+    private int getTileIndex(int id, int value, int player)
+    {
+        //if -1 returns that means the tile isn't present in this hand . probably need to add checks for this later
+        int tileIndex = -1;
+        for (int i = 0; i < gameManager.getHand(player).Count; i++)
+        {
+            TileProperties props = gameManager.getHand(player)[i].GetComponent<TileProperties>();
+            if (props.getID() == id && props.getValue() == value)
+            {
+                tileIndex = i;
+                break;
+            }
+        }
+        return tileIndex;
+    }
+
+        // Update is called once per frame
+        void Update()
     {
         
     }
