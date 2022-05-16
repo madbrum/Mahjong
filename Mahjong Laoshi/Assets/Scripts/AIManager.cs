@@ -70,8 +70,7 @@ public class AIManager : MonoBehaviour
                 //yield return new WaitForSeconds((float)0.5);
                 int index = getWorstIndex(currentPlayer);
                 Debug.Log("Index: " + index);
-                int random = Random.Range(0, hand.Count);
-                GameObject tile = gameManager.moveTileAtIndex(random, currentPlayer, GameManager.DISCARD);
+                GameObject tile = gameManager.moveTileAtIndex(index, currentPlayer, GameManager.DISCARD);
                 tile.transform.SetParent(gameManager.getArea(GameManager.DISCARD).transform, false);
                 tile.GetComponent<TileProperties>().setDiscard(true);
                 gameManager.logDiscard();
@@ -84,6 +83,8 @@ public class AIManager : MonoBehaviour
         }
         yield return null;
     }
+
+    public 
 
     private int getWorstIndex(int player)
     {
@@ -101,7 +102,7 @@ public class AIManager : MonoBehaviour
                 {
                     min = weightedValue;
                     minID = i;
-                    minValue = j;
+                    minValue = j + 1;
                 }
                 Debug.Log("ID: " + i + ", Value: " + (j + 1) + ", Weighted: " + weightedValue);
             }
@@ -122,10 +123,9 @@ public class AIManager : MonoBehaviour
         {
             neighbors[2] = handMatrix[id, value + 1];
         }
-        int weightedValue = 0;
-        if (neighbors[1] == 1)
+        int weightedValue = neighbors[1];
+        if (id != 3 && neighbors[1] == 1)
         {
-            weightedValue += neighbors[1];
             if (neighbors[0] < 2)
             {
                 weightedValue += neighbors[0];
@@ -137,7 +137,7 @@ public class AIManager : MonoBehaviour
         }
         else if (neighbors[1] >= 2)
         {
-            weightedValue += neighbors[1] * 2;
+            weightedValue = neighbors[1] * 2;
         }
         return weightedValue; 
     }
