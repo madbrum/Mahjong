@@ -40,7 +40,7 @@ public class GameManager : MonoBehaviour
 
     private int TESTAIRUN = 0;
 
-    private class TileComparer : IComparer<GameObject>
+    public class TileComparer : IComparer<GameObject>
     {
         public int Compare(GameObject tile1, GameObject tile2)
         {

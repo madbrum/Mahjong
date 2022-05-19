@@ -54,6 +54,11 @@ public class AIManager : MonoBehaviour
         yield return null;
     }
 
+    public bool scanDiscarded()
+    {
+        return false;
+    }
+
     public void discard()
     {
         StartCoroutine(discardCrt());
@@ -83,8 +88,6 @@ public class AIManager : MonoBehaviour
         }
         yield return null;
     }
-
-    public 
 
     private int getWorstIndex(int player)
     {
@@ -158,8 +161,59 @@ public class AIManager : MonoBehaviour
         return tileIndex;
     }
 
-        // Update is called once per frame
-        void Update()
+    private List<GameObject> getValidMeld(GameObject tile, int destPlayer)
+    {
+        List<GameObject> destHand = new List<GameObject>(gameManager.getHand(destPlayer));
+        destHand.Add(tile);
+        destHand.Sort(new GameManager.TileComparer());
+
+        int tileQV = tile.GetComponent<TileProperties>().getValue();
+        int tileQID = tile.GetComponent<TileProperties>().getID();
+        int dupeTiles = 0;
+        int incTiles = 0;
+        int prevValue = 0;
+        List<GameObject> dupes = new List<GameObject>();
+        List<GameObject> incs = new List<GameObject>();
+        for (int i = 0; i < destHand.Count; i++)
+        {
+            int curValue = destHand[i].GetComponent<TileProperties>().getValue();
+            int curID = destHand[i].GetComponent<TileProperties>().getID();
+            bool melded = destHand[i].GetComponent<TileProperties>().getMeld();
+            if (!melded && curID == tileQID && curValue == tileQV)
+            {
+                dupeTiles++;
+                dupes.Add(destHand[i]);
+            }
+            if (!melded && tileQID < 3 && curID == tileQID && curValue >= tileQV - 2 && curValue <= tileQV + 2)
+            {
+                if ((prevValue == 0 || curValue == prevValue + 1) && prevValue != curValue)
+                {
+                    incTiles++;
+                    incs.Add(destHand[i]);
+                    prevValue = curValue;
+                }
+                else if (prevValue != curValue)
+                {
+                    prevValue = curValue;
+                    incs = new List<GameObject>();
+                    incs.Add(destHand[i]);
+                    incTiles = 1;
+                }
+            }
+        }
+        if (dupeTiles >= 3)
+        {
+            return dupes;
+        }
+        if (incTiles >= 3 && incs.Contains(tile) && destPlayer == gameManager.getCurrentPlayer())
+        {
+            return incs;
+        }
+        return null;
+    }
+
+    // Update is called once per frame
+    void Update()
     {
         
     }
