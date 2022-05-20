@@ -511,18 +511,24 @@ public class GameManager : MonoBehaviour
     private IEnumerator runAI()
     {
         Debug.Log("Begin AI run #" + TESTAIRUN);
+        if (aiManager.scanDiscarded())
+        {
+            yield break;
+        }
         if (halted || currentPlayer == 0 || currentPlayer == 4)
         {
             Debug.Log("End AI run #" + TESTAIRUN + ", ended on return");
             TESTAIRUN++;
             yield break;
         }
-        
-        yield return new WaitForSeconds(3f);
         if (!halted)
         {
             moving = true;
-            aiManager.draw();
+            if (drawn == false)
+            {
+                yield return new WaitForSeconds(3f);
+                aiManager.draw();
+            }
             yield return new WaitForSeconds(1.5f);
             aiManager.discard();
             moving = false;

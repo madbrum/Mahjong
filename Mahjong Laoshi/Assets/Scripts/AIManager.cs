@@ -54,9 +54,51 @@ public class AIManager : MonoBehaviour
         yield return null;
     }
 
+    private IEnumerator discDrawCrt(int player, List<GameObject> meld)
+    {
+        yield return null;
+    }
+
     public bool scanDiscarded()
     {
-        return false;
+        List<GameObject> discards = gameManager.getHand(GameManager.DISCARD);
+        GameObject tile = discards[discards.Count - 1];
+        int maxValue = 0;
+        int maxPlayer = -1;
+        List<GameObject> maxMeld = null;
+        for (int i = 1; i < 4; i++)
+        {
+            if (i != gameManager.getCurrentPlayer()-1)
+            {
+                List<GameObject> meld = getValidMeld(tile, i);
+                if (meld != null)
+                {
+                    //get value by building matrix and taking center tile of meld, store in max
+                    int centerId = meld[1].GetComponent<TileProperties>().getID();
+                    int centerValue = meld[1].GetComponent<TileProperties>().getValue();
+                    int[,] hypoHand = gameManager.buildMatrix(gameManager.getHand(i));
+                    hypoHand[centerId, centerValue - 1]++;
+                    int value = weightSingle(hypoHand, centerId, centerValue-1);
+                    if (value > maxValue)
+                    {
+                        maxValue = value;
+                        maxPlayer = i;
+                        maxMeld = meld;
+                    }
+                }
+            }
+        }
+        //if there is a max, call the draw function from discard and pass in meld so you can reveal it and do everything you do in dragdrop 
+        if (maxValue != 0)
+        {
+            //draw with maxplayer and return true. UPDATE CURRENTPLAYER 
+            discDrawCrt(maxPlayer, maxMeld);
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 
     public void discard()
