@@ -54,8 +54,31 @@ public class AIManager : MonoBehaviour
         yield return null;
     }
 
-    private IEnumerator discDrawCrt(int player, List<GameObject> meld)
+    private void drawDisc(int player, List<GameObject> meld, GameObject tileP)
     {
+        StartCoroutine(discDrawCrt(player, meld, tileP));
+    }
+
+    private IEnumerator discDrawCrt(int player, List<GameObject> meld, GameObject tileP)
+    {
+        yield return new WaitForSeconds((float)1.5);
+        if (!gameManager.drawStatus())
+        {
+            tileP.transform.SetParent(gameManager.getArea(player).transform, false);
+            gameManager.moveTile(tileP, GameManager.DISCARD, player);
+            gameManager.logDraw();
+            tileP.GetComponent<TileProperties>().setPlayer(player);
+            tileP.GetComponent<TileProperties>().setDiscard(false);
+            gameManager.logPlayer(player);
+            foreach (GameObject tile in meld)
+            {
+                tile.GetComponent<TileProperties>().meld();
+                Transform parent = tile.transform.parent;
+                tile.transform.SetParent(null, false);
+                tile.transform.SetParent(parent, false);
+            }
+        }
+        gameManager.testState();
         yield return null;
     }
 
@@ -92,11 +115,13 @@ public class AIManager : MonoBehaviour
         if (maxValue != 0)
         {
             //draw with maxplayer and return true. UPDATE CURRENTPLAYER 
-            discDrawCrt(maxPlayer, maxMeld);
+            Debug.Log(maxPlayer);
+            drawDisc(maxPlayer, maxMeld, tile);
             return true;
         }
         else
         {
+            Debug.Log("no steals possible");
             return false;
         }
     }

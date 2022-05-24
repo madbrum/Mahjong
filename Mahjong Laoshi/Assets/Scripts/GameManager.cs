@@ -511,10 +511,7 @@ public class GameManager : MonoBehaviour
     private IEnumerator runAI()
     {
         Debug.Log("Begin AI run #" + TESTAIRUN);
-        if (aiManager.scanDiscarded())
-        {
-            yield break;
-        }
+        aiManager.scanDiscarded();
         if (halted || currentPlayer == 0 || currentPlayer == 4)
         {
             Debug.Log("End AI run #" + TESTAIRUN + ", ended on return");
