@@ -510,6 +510,8 @@ public class GameManager : MonoBehaviour
 
     private IEnumerator runAI()
     {
+        Debug.Log("State before AI run:");
+        testState();
         Debug.Log("Begin AI run #" + TESTAIRUN);
         aiManager.scanDiscarded();
         if (halted || currentPlayer == 0 || currentPlayer == 4)
@@ -532,6 +534,8 @@ public class GameManager : MonoBehaviour
         }
         Debug.Log("End AI run #" + TESTAIRUN);
         TESTAIRUN++;
+        Debug.Log("State after AI run: ");
+        testState();
     }
 
     public int[,] buildMatrix(List<GameObject> hand)
@@ -549,13 +553,13 @@ public class GameManager : MonoBehaviour
 
     public void testState()
     {
-        Debug.Log("East Size equals " + hands[EAST].Count);
-        Debug.Log("South Size equals " + hands[SOUTH].Count);
-        Debug.Log("West Size equals " + hands[WEST].Count);
-        Debug.Log("North Size equals " + hands[NORTH].Count);
-        Debug.Log("Drawn? " + drawn);
-        Debug.Log("Discarded? " + discarded);
-        Debug.Log("Current player is " + currentPlayer);
+        //Debug.Log("East Size equals " + hands[EAST].Count);
+        //Debug.Log("South Size equals " + hands[SOUTH].Count);
+        //Debug.Log("West Size equals " + hands[WEST].Count);
+        //Debug.Log("North Size equals " + hands[NORTH].Count);
+        Debug.Log("Drawn? " + drawn + " Discarded? " + discarded + " Current player is " + currentPlayer);
+        //Debug.Log("Discarded? " + discarded);
+        //Debug.Log("Current player is " + currentPlayer);
     }
 
     public void testHand(int player)

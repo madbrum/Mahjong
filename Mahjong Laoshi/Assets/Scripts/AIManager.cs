@@ -66,10 +66,10 @@ public class AIManager : MonoBehaviour
         {
             tileP.transform.SetParent(gameManager.getArea(player).transform, false);
             gameManager.moveTile(tileP, GameManager.DISCARD, player);
-            gameManager.logDraw();
-            tileP.GetComponent<TileProperties>().setPlayer(player);
-            tileP.GetComponent<TileProperties>().setDiscard(false);
             gameManager.logPlayer(player);
+            tileP.GetComponent<TileProperties>().setPlayer(player);
+            gameManager.logDraw(tileP.GetComponent<TileProperties>().getID(), tileP.GetComponent<TileProperties>().getValue());
+            tileP.GetComponent<TileProperties>().setDiscard(false);
             foreach (GameObject tile in meld)
             {
                 tile.GetComponent<TileProperties>().meld();
@@ -140,7 +140,7 @@ public class AIManager : MonoBehaviour
             if (!gameManager.discardStatus())
             {
                 //yield return new WaitForSeconds((float)0.5);
-                int index = getWorstIndex(currentPlayer);
+                int index = getWorstIndex(currentPlayer, hand);
                 Debug.Log("Index: " + index);
                 GameObject tile = gameManager.moveTileAtIndex(index, currentPlayer, GameManager.DISCARD);
                 tile.transform.SetParent(gameManager.getArea(GameManager.DISCARD).transform, false);
@@ -156,7 +156,7 @@ public class AIManager : MonoBehaviour
         yield return null;
     }
 
-    private int getWorstIndex(int player)
+    private int getWorstIndex(int player, List<GameObject> hand)
     {
         int[,] handMatrix = gameManager.buildMatrix(gameManager.getHand(player));
         int[,] weightMatrix = new int[4, 9];
@@ -170,11 +170,14 @@ public class AIManager : MonoBehaviour
                 int weightedValue = weightSingle(handMatrix, i, j);
                 if (weightedValue != 0 && weightedValue <= min)
                 {
-                    min = weightedValue;
-                    minID = i;
-                    minValue = j + 1;
+                    int tileIndex = getTileIndex(i, j, player);
+                    if (tileIndex != -1)
+                    {
+                        min = weightedValue;
+                        minID = i;
+                        minValue = j + 1;
+                    }
                 }
-                Debug.Log("ID: " + i + ", Value: " + (j + 1) + ", Weighted: " + weightedValue);
             }
         }
         //returns index of worst tile 
@@ -219,7 +222,7 @@ public class AIManager : MonoBehaviour
         for (int i = 0; i < gameManager.getHand(player).Count; i++)
         {
             TileProperties props = gameManager.getHand(player)[i].GetComponent<TileProperties>();
-            if (props.getID() == id && props.getValue() == value)
+            if (props.getID() == id && props.getValue() == value && !props.getMeld())
             {
                 tileIndex = i;
                 break;
