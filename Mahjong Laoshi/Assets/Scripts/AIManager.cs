@@ -99,7 +99,7 @@ public class AIManager : MonoBehaviour
                     //get value by building matrix and taking center tile of meld, store in max
                     int centerId = meld[1].GetComponent<TileProperties>().getID();
                     int centerValue = meld[1].GetComponent<TileProperties>().getValue();
-                    int[,] hypoHand = gameManager.buildMatrix(gameManager.getHand(i));
+                    int[,] hypoHand = buildMatrixConcealed(gameManager.getHand(i));
                     hypoHand[centerId, centerValue - 1]++;
                     int value = weightSingle(hypoHand, centerId, centerValue-1);
                     if (value > maxValue)
@@ -158,7 +158,7 @@ public class AIManager : MonoBehaviour
 
     private int getWorstIndex(int player, List<GameObject> hand)
     {
-        int[,] handMatrix = gameManager.buildMatrix(gameManager.getHand(player));
+        int[,] handMatrix = buildMatrixConcealed(gameManager.getHand(player));
         int[,] weightMatrix = new int[4, 9];
         int min = int.MaxValue;
         int minID = -1;
@@ -168,9 +168,10 @@ public class AIManager : MonoBehaviour
             for (int j = 0; j < handMatrix.GetLength(1); j++)
             {
                 int weightedValue = weightSingle(handMatrix, i, j);
+                weightMatrix[i, j] = weightedValue;
                 if (weightedValue != 0 && weightedValue <= min)
                 {
-                    int tileIndex = getTileIndex(i, j, player);
+                    int tileIndex = getTileIndex(i, j + 1, player);
                     if (tileIndex != -1)
                     {
                         min = weightedValue;
@@ -181,6 +182,13 @@ public class AIManager : MonoBehaviour
             }
         }
         //returns index of worst tile 
+        for (int i = 0; i < weightMatrix.GetLength(0); i++)
+        {
+            for (int j = 0; j < weightMatrix.GetLength(1); j++)
+            {
+                Debug.Log("At " + i + " " + (j+1) + " weight is " + weightMatrix[i, j]);
+            }
+        }
         return getTileIndex(minID, minValue, player);
     }
 
@@ -199,11 +207,15 @@ public class AIManager : MonoBehaviour
         int weightedValue = neighbors[1];
         if (id != 3 && neighbors[1] == 1)
         {
-            if (neighbors[0] < 2)
+            if (neighbors[0] == 1 && neighbors[2] == 1)
+            {
+                weightedValue += 4;
+            }
+            else if (neighbors[0] < 2)
             {
                 weightedValue += neighbors[0];
             }
-            if (neighbors[2] < 2)
+            else if (neighbors[2] < 2)
             {
                 weightedValue += neighbors[2];
             }
@@ -275,11 +287,82 @@ public class AIManager : MonoBehaviour
         {
             return dupes;
         }
-        if (incTiles >= 3 && incs.Contains(tile) && destPlayer == gameManager.getCurrentPlayer())
+        if (incTiles >= 3 && incs.Contains(tile))
         {
-            return incs;
+            if (destPlayer == gameManager.getCurrentPlayer())
+            {
+                return incs;
+            }
+            else if (checkPotential(destPlayer, tile))
+            {
+                return incs;
+            }
         }
         return null;
+    }
+
+    public bool checkPotential(int player, GameObject tile)
+    {
+        int[,] handMatrix = gameManager.buildMatrix(gameManager.getHand(player));
+        TileProperties props = tile.GetComponent<TileProperties>();
+        handMatrix[props.getID(), props.getValue() - 1]++;
+        int melds = 0;
+        int eyes = 0;
+        for (int i = 0; i < handMatrix.GetLength(0); i++)
+        {
+            for (int j = 0; j < handMatrix.GetLength(1); j++)
+            {
+                if (handMatrix[i, j] >= 3)
+                {
+                    melds++;
+                }
+                else if (handMatrix[i, j] == 2)
+                {
+                    if (eyes < 1)
+                    {
+                        eyes++;
+                    }
+                }
+                else if (handMatrix[i, j] == 1)
+                {
+                    if (j + 2 < handMatrix.GetLength(1))
+                    {
+                        if (handMatrix[i, j + 1] == 1 && handMatrix[i, j + 2] == 1)
+                        {
+                            melds++;
+                            j += 2;
+                        }
+                    }
+                }
+            }
+        }
+        if (melds == 4 & eyes == 1)
+        {
+            Debug.Log("win!");
+            return true;
+        }
+        else
+        {
+            Debug.Log("lose");
+            return false;
+        }
+    }
+
+    public int[,] buildMatrixConcealed(List<GameObject> hand)
+    {
+        int[,] handMatrix = new int[4, 9];
+        for (int i = 0; i < hand.Count; i++)
+        {
+            TileProperties tileP = hand[i].GetComponent<TileProperties>();
+            if (!tileP.getMeld())
+            {
+                int id = tileP.getID();
+                int valueIndex = tileP.getValue() - 1;
+                handMatrix[id, valueIndex]++;
+            }
+            
+        }
+        return handMatrix;
     }
 
     // Update is called once per frame

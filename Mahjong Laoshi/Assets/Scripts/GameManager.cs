@@ -132,7 +132,11 @@ public class GameManager : MonoBehaviour
 
     public void logDraw(int id, int value)
     {
-        bool win = checkMahjong(currentPlayer);
+        bool won = checkMahjong(currentPlayer);
+        if (won)
+        {
+            win(currentPlayer);
+        }
         int[,] handMatrix = buildMatrix(hands[currentPlayer]);
         if (handMatrix[id,value-1] != 4)
         {
@@ -404,6 +408,7 @@ public class GameManager : MonoBehaviour
 
     private void win(int winner)
     {
+        StopAllCoroutines();
         string winStr = "";
         if (winner == EAST)
         {
