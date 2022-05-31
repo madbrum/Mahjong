@@ -118,6 +118,7 @@ public class GameManager : MonoBehaviour
     public void logDiscard()
     {
         discarded = true;
+        testState();
     }
 
     public void logDraw()
@@ -142,6 +143,11 @@ public class GameManager : MonoBehaviour
         {
             drawn = true;
         }
+        else if (currentPlayer != 0 && currentPlayer < 4)
+        {
+            StopCoroutine(runAI());
+            StartCoroutine(runAI());
+        }
     }
 
     public void incrementClick()
@@ -152,6 +158,16 @@ public class GameManager : MonoBehaviour
     public int getClicks()
     {
         return clicks;
+    }
+
+    public bool getMoving()
+    {
+        return moving;
+    }
+
+    public void disableMoving()
+    {
+        moving = false;
     }
 
     //TODO: fix bug where the discards that were just discarded get flipped 
@@ -527,6 +543,7 @@ public class GameManager : MonoBehaviour
         }
         if (!halted)
         {
+            Debug.Log("passed into standard AI run");
             moving = true;
             if (drawn == false)
             {

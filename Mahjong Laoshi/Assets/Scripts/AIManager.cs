@@ -37,7 +37,7 @@ public class AIManager : MonoBehaviour
     private IEnumerator drawCrt()
     {
         int currentPlayer = gameManager.getCurrentPlayer();
-        if (currentPlayer != 0 && currentPlayer != 4)
+        if (currentPlayer != 0 && currentPlayer != 4 && gameManager.getMoving())
         {
             gameManager.getHand(currentPlayer);
             if (!gameManager.drawStatus())
@@ -50,6 +50,10 @@ public class AIManager : MonoBehaviour
                 wall.GetComponent<Image>().CrossFadeColor(wall.colors.normalColor, wall.colors.fadeDuration, true, true);
                 gameManager.getWall(currentPlayer).GetComponent<DrawSingle>().dealSingle();
             }
+        }
+        else
+        {
+            gameManager.disableMoving();
         }
         yield return null;
     }
@@ -116,6 +120,7 @@ public class AIManager : MonoBehaviour
         {
             //draw with maxplayer and return true. UPDATE CURRENTPLAYER 
             Debug.Log(maxPlayer);
+            gameManager.disableMoving();
             drawDisc(maxPlayer, maxMeld, tile);
             return true;
         }
@@ -134,7 +139,7 @@ public class AIManager : MonoBehaviour
     private IEnumerator discardCrt()
     {
         int currentPlayer = gameManager.getCurrentPlayer();
-        if (currentPlayer != 0 && currentPlayer != 4)
+        if (currentPlayer != 0 && currentPlayer != 4 && gameManager.getMoving())
         {
             List<GameObject> hand = gameManager.getHand(currentPlayer);
             if (!gameManager.discardStatus())
@@ -152,6 +157,10 @@ public class AIManager : MonoBehaviour
                 }
                 //yield return new WaitForSeconds((float)0.5);
             }
+        }
+        else
+        {
+            gameManager.disableMoving();
         }
         yield return null;
     }
@@ -182,13 +191,13 @@ public class AIManager : MonoBehaviour
             }
         }
         //returns index of worst tile 
-        for (int i = 0; i < weightMatrix.GetLength(0); i++)
-        {
-            for (int j = 0; j < weightMatrix.GetLength(1); j++)
-            {
-                Debug.Log("At " + i + " " + (j+1) + " weight is " + weightMatrix[i, j]);
-            }
-        }
+        //for (int i = 0; i < weightMatrix.GetLength(0); i++)
+        //{
+        //    for (int j = 0; j < weightMatrix.GetLength(1); j++)
+        //    {
+        //        Debug.Log("At " + i + " " + (j+1) + " weight is " + weightMatrix[i, j]);
+        //    }
+        //}
         return getTileIndex(minID, minValue, player);
     }
 
@@ -266,7 +275,7 @@ public class AIManager : MonoBehaviour
                 dupeTiles++;
                 dupes.Add(destHand[i]);
             }
-            if (!melded && tileQID < 3 && curID == tileQID && curValue >= tileQV - 2 && curValue <= tileQV + 2)
+            if (!melded && tileQID < 3 && curID == tileQID && curValue >= tileQV - 2 && curValue <= tileQV + 2 && incTiles < 3)
             {
                 if ((prevValue == 0 || curValue == prevValue + 1) && prevValue != curValue)
                 {
@@ -287,7 +296,7 @@ public class AIManager : MonoBehaviour
         {
             return dupes;
         }
-        if (incTiles >= 3 && incs.Contains(tile))
+        if (incTiles == 3 && incs.Contains(tile))
         {
             if (destPlayer == gameManager.getCurrentPlayer())
             {

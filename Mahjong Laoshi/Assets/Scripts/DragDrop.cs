@@ -133,5 +133,6 @@ public class DragDrop : MonoBehaviour
         }
         gameManager.disableSelection(destPlayerTemp, valid);
         destPlayerTemp = -1;
+        Debug.Log("steal completed");
     }
 }
