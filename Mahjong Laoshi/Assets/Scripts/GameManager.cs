@@ -143,11 +143,6 @@ public class GameManager : MonoBehaviour
         {
             drawn = true;
         }
-        else if (currentPlayer != 0 && currentPlayer < 4)
-        {
-            StopCoroutine(runAI());
-            StartCoroutine(runAI());
-        }
     }
 
     public void incrementClick()
@@ -225,6 +220,7 @@ public class GameManager : MonoBehaviour
 
     public void halt(GameObject haltTile)
     {
+        moving = false;
         StopAllCoroutines();
         OKButton.hideFlags = HideFlags.None;
         OKButton.SetActive(true);
@@ -442,6 +438,12 @@ public class GameManager : MonoBehaviour
         {
             winStr = "NORTH";
         }
+        for (int i = 0; i < areas[GameManager.DISCARD].transform.childCount; i++)
+        {
+            GameObject.Destroy(areas[GameManager.DISCARD].transform.GetChild(i).gameObject);
+        }
+        moving = false;
+        titles[currentPlayer].GetComponent<Image>().sprite = titleImgs[currentPlayer];
         instructions.SetActive(true);
         instructions.GetComponentInChildren<Text>().text = winStr + " WINS!";
         currentPlayer = 4;
@@ -461,6 +463,7 @@ public class GameManager : MonoBehaviour
         }
         areas = new List<GameObject>();
         hands[DISCARD] = new List<GameObject>();
+        titles = new List<GameObject>();
         drawn = false;
         discarded = false;
         halted = false;
@@ -534,9 +537,10 @@ public class GameManager : MonoBehaviour
         Debug.Log("State before AI run:");
         testState();
         Debug.Log("Begin AI run #" + TESTAIRUN);
-        aiManager.scanDiscarded();
-        if (halted || currentPlayer == 0 || currentPlayer == 4)
+        bool steal = aiManager.scanDiscarded();
+        if ((halted || currentPlayer == 0 || currentPlayer == 4) && !steal)
         {
+            moving = false;
             Debug.Log("End AI run #" + TESTAIRUN + ", ended on return");
             TESTAIRUN++;
             yield break;

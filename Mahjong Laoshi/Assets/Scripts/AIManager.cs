@@ -40,20 +40,16 @@ public class AIManager : MonoBehaviour
         if (currentPlayer != 0 && currentPlayer != 4 && gameManager.getMoving())
         {
             gameManager.getHand(currentPlayer);
-            if (!gameManager.drawStatus())
+            Button wall = gameManager.getWall(currentPlayer).GetComponent<Button>();
+            Sprite original = wall.GetComponent<Image>().sprite;
+            while (!gameManager.drawStatus())
             {
                 //yield return new WaitForSeconds((float) 0.5);
-                Button wall = gameManager.getWall(currentPlayer).GetComponent<Button>();
-                Sprite original = wall.GetComponent<Image>().sprite;
                 wall.GetComponent<Image>().CrossFadeColor(wall.colors.pressedColor, wall.colors.fadeDuration, true, true);
                 yield return new WaitForSeconds((float)0.25);
                 wall.GetComponent<Image>().CrossFadeColor(wall.colors.normalColor, wall.colors.fadeDuration, true, true);
                 gameManager.getWall(currentPlayer).GetComponent<DrawSingle>().dealSingle();
             }
-        }
-        else
-        {
-            gameManager.disableMoving();
         }
         yield return null;
     }
@@ -112,6 +108,13 @@ public class AIManager : MonoBehaviour
                         maxPlayer = i;
                         maxMeld = meld;
                     }
+                    else if (checkPotential(i, tile))
+                    {
+                        maxValue = value;
+                        maxPlayer = i;
+                        maxMeld = meld;
+                        break;
+                    }
                 }
             }
         }
@@ -157,10 +160,6 @@ public class AIManager : MonoBehaviour
                 }
                 //yield return new WaitForSeconds((float)0.5);
             }
-        }
-        else
-        {
-            gameManager.disableMoving();
         }
         yield return null;
     }
@@ -295,6 +294,13 @@ public class AIManager : MonoBehaviour
         if (dupeTiles >= 3)
         {
             return dupes;
+        }
+        else if (dupeTiles == 2)
+        {
+            if (checkPotential(destPlayer, tile))
+            {
+                return dupes;
+            }
         }
         if (incTiles == 3 && incs.Contains(tile))
         {
