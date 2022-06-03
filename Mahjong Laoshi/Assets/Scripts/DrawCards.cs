@@ -111,6 +111,7 @@ public class DrawCards : MonoBehaviour
 
         toggleButton.hideFlags = HideFlags.None;
         toggleButton.SetActive(true);
+
         gameManager.setButton(OKButton);
 
         instructions.SetActive(false);
@@ -122,6 +123,8 @@ public class DrawCards : MonoBehaviour
         gameObject.hideFlags = HideFlags.HideInHierarchy;
         gameObject.SetActive(false);
         gameManager.setDrawer(gameObject);
+
+        gameManager.toggleHide();
     }
 
     private void load()
@@ -148,6 +151,10 @@ public class DrawCards : MonoBehaviour
                 single.hideFlags = HideFlags.HideInHierarchy;
                 single.SetActive(false);
                 tiles.Add(single);
+                if (single.GetComponent<TileProperties>().getHidden())
+                {
+                    single.GetComponent<TileProperties>().toggleHide();
+                }
                 keyCount++;
             }
         }

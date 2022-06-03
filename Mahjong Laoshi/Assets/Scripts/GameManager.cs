@@ -442,6 +442,10 @@ public class GameManager : MonoBehaviour
         {
             GameObject.Destroy(areas[GameManager.DISCARD].transform.GetChild(i).gameObject);
         }
+        if (hidden)
+        {
+            toggleHide();
+        }
         moving = false;
         titles[currentPlayer].GetComponent<Image>().sprite = titleImgs[currentPlayer];
         instructions.SetActive(true);
@@ -562,6 +566,19 @@ public class GameManager : MonoBehaviour
         TESTAIRUN++;
         Debug.Log("State after AI run: ");
         testState();
+    }
+
+    private void organizeHand(int player)
+    {
+        //call in each logdraw
+        hands[player].Sort(new TileComparer());
+        for (int i = hands[player].Count - 1; i >= 0; i--)
+        {
+            GameObject tile = hands[player][i];
+            Transform parent = tile.transform.parent;
+            tile.transform.SetParent(null, false);
+            tile.transform.SetParent(parent, false);
+        }
     }
 
     public int[,] buildMatrix(List<GameObject> hand)

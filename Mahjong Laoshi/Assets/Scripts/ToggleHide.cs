@@ -11,7 +11,7 @@ public class ToggleHide : MonoBehaviour
     private void Start()
     {
         gameManager = GameManager.Instance;
-        toggledMsg = "SHOW";
+        toggledMsg = "HIDE";
         gameObject.hideFlags = HideFlags.HideInHierarchy;
         gameObject.SetActive(false);
     }
