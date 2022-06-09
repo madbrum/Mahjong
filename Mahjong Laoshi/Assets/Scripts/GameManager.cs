@@ -129,6 +129,7 @@ public class GameManager : MonoBehaviour
             win(currentPlayer);
         }
         drawn = true;
+        //organizeHand(currentPlayer);
     }
 
     public void logDraw(int id, int value)
@@ -143,6 +144,7 @@ public class GameManager : MonoBehaviour
         {
             drawn = true;
         }
+        //organizeHand(currentPlayer);
     }
 
     public void incrementClick()
@@ -572,7 +574,22 @@ public class GameManager : MonoBehaviour
     {
         //call in each logdraw
         hands[player].Sort(new TileComparer());
+        List<GameObject> melds = new List<GameObject>();
         for (int i = hands[player].Count - 1; i >= 0; i--)
+        {
+            GameObject tile = hands[player][i];
+            if (tile.GetComponent<TileProperties>().getMeld())
+            {
+                melds.Add(tile);
+            }
+            else
+            {
+                Transform parent = tile.transform.parent;
+                tile.transform.SetParent(null, false);
+                tile.transform.SetParent(parent, false);
+            }
+        }
+        for (int i = melds.Count - 1; i >= 0; i++)
         {
             GameObject tile = hands[player][i];
             Transform parent = tile.transform.parent;
